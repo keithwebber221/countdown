@@ -1,0 +1,3165 @@
+﻿<!DOCTYPE html>
+<html lang="zh-HK"><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="課堂倒數">
+  <meta name="robots" content="noindex, nofollow">
+  <title id="docTitle">課堂倒數</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@300;400;500;600&amp;family=LXGW+WenKai+TC:wght@400;700&amp;family=Noto+Sans+TC:wght@300;400;500;700&amp;family=Noto+Serif+TC:wght@400;600;700&amp;family=Playfair+Display:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;family=Zen+Maru+Gothic:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <!--ADMIN_XLSX_START-->
+  
+  <!--ADMIN_XLSX_END-->
+  <style>
+    :root {
+      --bg: #F7F6F2;
+      --surface: #FFFFFF;
+      --surface-alt: #EFECE6;
+      --text: #18181B;
+      --muted: #78756F;
+      --accent: #18181B;
+      --accent-fg: #FFFFFF;
+      --border: rgba(24, 24, 27, 0.08);
+
+      --font-body: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-display: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-num: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+
+      --fs-base: 16px;
+      --fs-sm: 13px;
+      --fs-xs: 11.5px;
+      --fs-card-title: 18.5px;
+      --fs-card-num: 44px;
+      --fs-title: 36px;
+      --fs-hero: 160px;
+      --space-scale: 1.15;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-size: var(--fs-base); }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: var(--fs-base);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      min-height: 100vh;
+    }
+
+    button, input, select { font-family: inherit; color: inherit; }
+    .hidden { display: none !important; }
+
+    /* ======================================================================
+       SHARED BUTTONS & SEGMENTED CONTROLS
+       ====================================================================== */
+    .pill-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 18px;
+      font-size: var(--fs-sm);
+      font-weight: 500;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.16s ease;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .pill-btn:hover { border-color: var(--muted); }
+    .pill-btn-primary {
+      background: var(--accent);
+      color: var(--accent-fg);
+      border-color: var(--accent);
+    }
+    .pill-btn-primary:hover { opacity: 0.88; border-color: var(--accent); }
+    .pill-btn-ghost {
+      background: transparent;
+      border-color: transparent;
+      color: var(--muted);
+    }
+    .pill-btn-ghost:hover {
+      background: var(--surface-alt);
+      color: var(--text);
+    }
+
+    .seg-tabs {
+      display: inline-flex;
+      gap: 4px;
+      background: var(--surface-alt);
+      padding: 4px;
+      border-radius: 999px;
+    }
+    .seg-btn {
+      border: none;
+      background: transparent;
+      padding: 6px 16px;
+      font-size: var(--fs-sm);
+      font-weight: 500;
+      color: var(--muted);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+    .seg-btn.active {
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    /* ======================================================================
+       PORTAL VIEW (BREATHABLE GALLERY LAYOUT)
+       ====================================================================== */
+    .portal-wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: calc(34px * var(--space-scale)) 28px calc(84px * var(--space-scale));
+    }
+
+    .portal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: calc(44px * var(--space-scale));
+    }
+    .school-identity {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .school-name {
+      font-family: var(--font-display);
+      font-size: calc(var(--fs-base) * 1.06);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .school-year {
+      font-size: var(--fs-sm);
+      color: var(--muted);
+    }
+    .readonly-tag {
+      font-size: var(--fs-xs);
+      padding: 2px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .context-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: calc(30px * var(--space-scale));
+    }
+    .class-selector-hero {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .clean-select {
+      appearance: none;
+      -webkit-appearance: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 36px 10px 16px;
+      font-family: var(--font-display);
+      font-size: calc(var(--fs-base) * 1.04);
+      font-weight: 600;
+      cursor: pointer;
+      background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+      background-position: calc(100% - 16px) 52%, calc(100% - 11px) 52%;
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+    .clean-select:hover, .clean-select:focus { border-color: var(--muted); }
+
+    .days-summary-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      font-size: var(--fs-sm);
+      color: var(--muted);
+      cursor: pointer;
+      transition: border-color 0.15s ease;
+    }
+    .days-summary-pill:hover { border-color: var(--muted); color: var(--text); }
+    .days-summary-pill strong {
+      font-family: var(--font-num);
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .date-drawer {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-bottom: calc(30px * var(--space-scale));
+    }
+    .date-drawer-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .field-lite {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .field-lite span {
+      font-size: var(--fs-xs);
+      color: var(--muted);
+      letter-spacing: 0.03em;
+    }
+    .input-lite {
+      height: 38px;
+      padding: 0 12px;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      font-size: var(--fs-sm);
+      outline: none;
+    }
+    .milestone-chips {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .chip {
+      font-size: var(--fs-xs);
+      padding: 5px 13px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .chip:hover, .chip.active {
+      background: var(--accent);
+      color: var(--accent-fg);
+      border-color: var(--accent);
+    }
+
+    .filter-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: calc(26px * var(--space-scale));
+    }
+    .search-minimal {
+      height: 36px;
+      padding: 0 15px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: var(--fs-sm);
+      width: 210px;
+      outline: none;
+      transition: width 0.2s ease, border-color 0.15s ease;
+    }
+    .search-minimal:focus { width: 250px; border-color: var(--muted); }
+
+    /* My Electives Personalization Drawer & Share Modal */
+    .my-electives-drawer {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px 26px;
+      margin-bottom: calc(28px * var(--space-scale));
+    }
+    .my-el-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .my-el-col label {
+      display: block;
+      font-size: var(--fs-xs);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .my-el-select {
+      width: 100%;
+      height: 38px;
+      padding: 0 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      font-size: var(--fs-sm);
+      outline: none;
+    }
+    .desensitize-box {
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      margin-top: 16px;
+    }
+    .qr-preview-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      margin: 16px auto;
+      width: fit-content;
+    }
+    .share-url-input {
+      width: 100%;
+      height: 38px;
+      padding: 0 12px;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text);
+      outline: none;
+    }
+    @media (max-width: 720px) {
+      .my-el-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Spacious Gallery Cards */
+    .subject-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: calc(22px * var(--space-scale));
+    }
+    .subj-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: calc(26px * var(--space-scale)) calc(28px * var(--space-scale));
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: calc(186px * var(--space-scale));
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .subj-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--muted);
+      box-shadow: 0 12px 32px -14px rgba(0, 0, 0, 0.08);
+    }
+    .subj-card {
+      position: relative;
+      background: var(--card-bg, var(--surface));
+      border-color: var(--card-border, var(--border));
+    }
+    .subj-card:hover {
+      border-color: var(--card-hover-border, var(--muted));
+    }
+    .subj-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: var(--fs-xs);
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      margin-bottom: 12px;
+    }
+    .grp-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: var(--fs-xs);
+      background: var(--pill-bg, transparent);
+      color: var(--pill-fg, var(--muted));
+      letter-spacing: 0.02em;
+    }
+    .grp-pill.plain {
+      padding: 0;
+      font-weight: 500;
+    }
+    .tab-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      margin-right: 6px;
+      vertical-align: middle;
+      position: relative;
+      top: -0.5px;
+    }
+    .poster-eyebrow-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+    }
+    .subj-card-name {
+      font-family: var(--font-display);
+      font-size: var(--fs-card-title);
+      font-weight: 600;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+    }
+    .subj-card-extra {
+      font-size: var(--fs-xs);
+      color: var(--muted);
+      margin-top: 6px;
+    }
+    .subj-card-bottom {
+      margin-top: calc(28px * var(--space-scale));
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+    .subj-card-num {
+      font-family: var(--font-num);
+      font-size: var(--fs-card-num);
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: -0.035em;
+      color: var(--card-num-color, var(--accent));
+    }
+    .subj-card-unit {
+      font-size: var(--fs-sm);
+      color: var(--muted);
+      margin-left: 6px;
+      font-weight: 400;
+    }
+    .subj-card-cta {
+      font-size: var(--fs-xs);
+      color: var(--muted);
+      opacity: 0.55;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+    .subj-card:hover .subj-card-cta {
+      opacity: 1;
+      transform: translateX(3px);
+    }
+
+    /* Section Divider & Class Timetable Table */
+    .section-block {
+      margin-top: calc(52px * var(--space-scale));
+      padding-top: calc(40px * var(--space-scale));
+      border-top: 1px solid var(--border);
+    }
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: calc(var(--fs-base) * 1.2);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .section-sub {
+      font-size: var(--fs-sm);
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .tt-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow-x: auto;
+    }
+    .tt-table {
+      width: 100%;
+      min-width: 700px;
+      border-collapse: collapse;
+      text-align: center;
+      font-size: var(--fs-sm);
+    }
+    .tt-table th {
+      padding: 14px 10px;
+      background: var(--surface-alt);
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      font-weight: 600;
+    }
+    .tt-table th:last-child, .tt-table td:last-child { border-right: none; }
+    .tt-table td {
+      padding: 13px 8px;
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      vertical-align: middle;
+      line-height: 1.38;
+    }
+    .tt-table tr:last-child td { border-bottom: none; }
+    .tt-period-col {
+      width: 98px;
+      background: var(--surface-alt);
+      font-weight: 600;
+      text-align: left;
+      padding-left: 16px !important;
+      white-space: nowrap;
+    }
+    .tt-time {
+      display: block;
+      font-size: var(--fs-xs);
+      color: var(--muted);
+      font-weight: 400;
+      margin-top: 2px;
+      font-family: var(--font-num);
+    }
+    .tt-day-rem {
+      display: block;
+      font-size: var(--fs-xs);
+      color: var(--muted);
+      font-weight: 400;
+      margin-top: 2px;
+    }
+    .tt-elective-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      background: var(--surface-alt);
+      font-size: var(--fs-xs);
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* Calendar Grid */
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
+      gap: 24px;
+    }
+    .cal-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+    }
+    .cal-title {
+      font-family: var(--font-display);
+      font-size: var(--fs-base);
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+    .cal-wk, .cal-cells {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      text-align: center;
+    }
+    .cal-wk div {
+      font-size: var(--fs-xs);
+      color: var(--muted);
+      padding-bottom: 6px;
+    }
+    .cal-cell {
+      height: 40px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .cal-cell.wknd { color: var(--muted); opacity: 0.3; cursor: default; }
+    .cal-cell.on { background: var(--accent); color: var(--accent-fg); }
+    .cal-cell.out { background: var(--surface-alt); color: var(--muted); }
+    .cal-cell.off { color: var(--muted); opacity: 0.55; }
+    .cal-cell.ovr { outline: 2px solid var(--accent); outline-offset: 1px; }
+    .cal-cell small { font-size: 9px; opacity: 0.8; line-height: 1; margin-top: 2px; }
+
+    /* Admin Import & Export */
+    .admin-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+    .admin-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .drop-area {
+      border: 1px dashed var(--muted);
+      border-radius: 12px;
+      padding: 20px 22px;
+      display: block;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .drop-area:hover { background: var(--surface-alt); }
+
+    /* ======================================================================
+       SINGLE SUBJECT ZEN POSTER VIEW
+       ====================================================================== */
+    .poster-screen {
+      min-height: 100vh;
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 32px 32px 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .poster-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .poster-center {
+      text-align: center;
+      padding: calc(48px * var(--space-scale)) 0;
+      margin: auto 0;
+    }
+    .poster-eyebrow {
+      font-size: var(--fs-sm);
+      color: var(--muted);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: calc(14px * var(--space-scale));
+    }
+    .poster-subject {
+      font-family: var(--font-display);
+      font-size: clamp(22px, var(--fs-title), 11vw);
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      line-height: 1.25;
+      margin-bottom: calc(38px * var(--space-scale));
+    }
+    .poster-number-row {
+      display: inline-flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 14px;
+    }
+    .poster-hero-num {
+      font-family: var(--font-num);
+      font-size: min(var(--fs-hero), 40vw);
+      font-weight: 600;
+      line-height: 0.92;
+      letter-spacing: -0.045em;
+      color: var(--accent);
+    }
+    .poster-hero-unit {
+      font-family: var(--font-display);
+      font-size: calc(var(--fs-title) * 0.62);
+      font-weight: 500;
+      color: var(--muted);
+    }
+    .poster-hairline {
+      width: 140px;
+      height: 2px;
+      background: var(--border);
+      margin: calc(36px * var(--space-scale)) auto calc(22px * var(--space-scale));
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .poster-hairline-fill {
+      height: 100%;
+      background: var(--accent);
+      transition: width 0.4s ease;
+    }
+    .poster-caption {
+      font-size: var(--fs-base);
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+    .poster-subcaption {
+      font-size: var(--fs-sm);
+      color: var(--muted);
+      opacity: 0.8;
+      margin-top: 8px;
+    }
+    .poster-bottom {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Timeline Modal */
+    .modal-mask {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.32);
+      backdrop-filter: blur(3px);
+      z-index: 45;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .modal-mask.open { display: flex; }
+    .modal-sheet {
+      width: 100%;
+      max-width: 560px;
+      max-height: 82vh;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.16);
+    }
+    .modal-head {
+      padding: 22px 26px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-body {
+      padding: 12px 26px 22px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .timeline-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: var(--fs-sm);
+      gap: 12px;
+    }
+    .timeline-row:last-child { border-bottom: none; }
+
+    /* ======================================================================
+       APPEARANCE, FONT SIZE & DENSITY STUDIO DRAWER
+       ====================================================================== */
+    .studio-mask {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.24);
+      z-index: 60;
+      display: none;
+      justify-content: flex-end;
+    }
+    .studio-mask.open { display: flex; }
+    .studio-panel {
+      width: 100%;
+      max-width: 420px;
+      height: 100%;
+      background: #FFFFFF;
+      color: #18181B;
+      padding: 26px 24px 42px;
+      overflow-y: auto;
+      box-shadow: -12px 0 36px rgba(0, 0, 0, 0.12);
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .studio-sec-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #71717A;
+      margin-bottom: 10px;
+    }
+    .preset-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .preset-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .studio-chip {
+      padding: 9px 6px;
+      border-radius: 9px;
+      border: 1px solid #E4E4E7;
+      background: #FAFAFA;
+      color: #27272A;
+      font-size: 12px;
+      font-weight: 500;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.14s ease;
+    }
+    .studio-chip:hover, .studio-chip.active {
+      border-color: #18181B;
+      background: #18181B;
+      color: #FFFFFF;
+    }
+    .slider-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 12px;
+      background: #FAFAFA;
+      border: 1px solid #F0F0F2;
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .slider-row { display: flex; flex-direction: column; gap: 5px; }
+    .slider-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #3F3F46;
+    }
+    .num-box {
+      width: 64px;
+      height: 26px;
+      border: 1px solid #D4D4D8;
+      border-radius: 6px;
+      padding: 0 6px;
+      font-size: 12px;
+      text-align: right;
+      background: #FFFFFF;
+      color: #18181B;
+    }
+    .range-bar { width: 100%; accent-color: #18181B; cursor: pointer; }
+    .palette-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .pal-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 9px;
+      border: 1px solid #E4E4E7;
+      background: #FAFAFA;
+      color: #18181B;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .pal-btn.active, .pal-btn:hover { border-color: #18181B; background: #FFFFFF; }
+    .pal-dots { display: flex; }
+    .pal-dot { width: 15px; height: 15px; border-radius: 50%; border: 1px solid rgba(0, 0, 0, 0.12); }
+    .pal-dot + .pal-dot { margin-left: -4px; }
+    .pickers-4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px; }
+    .picker-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 10px;
+      border-radius: 8px;
+      border: 1px solid #E4E4E7;
+      font-size: 12px;
+      color: #3F3F46;
+    }
+    .picker-item input[type="color"] { width: 24px; height: 24px; border: none; background: none; cursor: pointer; }
+    .font-stack-list { display: flex; flex-direction: column; gap: 7px; }
+    .font-item-btn {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 13px;
+      border-radius: 9px;
+      border: 1px solid #E4E4E7;
+      background: #FAFAFA;
+      color: #18181B;
+      cursor: pointer;
+      text-align: left;
+    }
+    .font-item-btn.active, .font-item-btn:hover { border-color: #18181B; background: #FFFFFF; }
+
+    @media (max-width: 720px) {
+      .admin-two-col { grid-template-columns: 1fr; }
+      .portal-wrap { padding: 24px 18px 60px; }
+      .poster-screen { padding: 22px 20px 32px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!--PORTAL_UI_START-->
+  <div id="portalRoot">
+    <div class="portal-wrap">
+      <header class="portal-header">
+        <div class="school-identity">
+          <span class="school-name" id="brandSchoolName">課堂倒數</span>
+          <span class="school-year" id="brandYearText">2026/2027</span>
+          <span class="readonly-tag hidden" id="readonlyBadge">唯讀版</span>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <nav class="seg-tabs hidden" id="portalTabs">
+            <button class="seg-btn active" data-tab="subjects" onclick="switchTab('subjects')">科目總覽</button>
+            <!--ADMIN_TAB_BTN_START-->
+            
+            <!--ADMIN_TAB_BTN_END-->
+          </nav>
+          <button class="pill-btn" onclick="openStudio()">外觀與字體</button>
+        </div>
+      </header>
+
+      <!-- TAB 1: SUBJECT CARDS -->
+      <section id="panelSubjects">
+        <div class="context-bar">
+          <div class="class-selector-hero">
+            <select id="formSelect" class="clean-select" onchange="onFormChange()"></select>
+            <select id="classSelect" class="clean-select" onchange="onClassChange()"></select>
+          </div>
+
+          <button class="days-summary-pill" onclick="toggleDateDrawer()">
+            <span id="summaryPillText">尚餘 <strong>--</strong> 上課天</span>
+            <span style="font-size:11px; opacity:0.65;">截止日設定 ▾</span>
+          </button>
+        </div>
+
+        <div id="dateDrawer" class="date-drawer hidden">
+          <div class="date-drawer-row">
+            <div style="display:flex; gap:16px; flex-wrap:wrap;">
+              <label class="field-lite">
+                <span>計算起始日</span>
+                <input type="date" id="startDateInput" class="input-lite" onchange="recalculate()">
+              </label>
+              <label class="field-lite">
+                <span>最後上課日</span>
+                <input type="date" id="endDateInput" class="input-lite" onchange="recalculate()">
+              </label>
+            </div>
+            <label style="display:inline-flex; align-items:center; gap:8px; font-size:var(--fs-sm); color:var(--muted); cursor:pointer;">
+              <input type="checkbox" id="deductTodayInput" checked="" onchange="recalculate()">
+              實時扣減今日已完課節
+            </label>
+          </div>
+          <div class="milestone-chips" id="milestoneRow"></div>
+        </div>
+
+        <div class="filter-strip">
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <div class="seg-tabs" id="groupTabs">
+              <button class="seg-btn active" data-grp="ALL" onclick="setGroupFilter('ALL')">全部</button>
+              <button class="seg-btn hidden" id="mineTabBtn" data-grp="MINE" onclick="setGroupFilter('MINE')">我的科目</button>
+              <button class="seg-btn" data-grp="CORE" onclick="setGroupFilter('CORE')">核心</button>
+              <button class="seg-btn" data-grp="X1" onclick="setGroupFilter('X1')">X1</button>
+              <button class="seg-btn" data-grp="X2" onclick="setGroupFilter('X2')">X2</button>
+              <button class="seg-btn" data-grp="X3" onclick="setGroupFilter('X3')">X3</button>
+            </div>
+            <button id="myElectivesBtn" class="pill-btn hidden" onclick="toggleMyElectivesDrawer()" style="padding:6px 14px;">設定我的選修</button>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <input type="text" id="searchInput" class="search-minimal" placeholder="搜尋科目..." oninput="renderSubjectCards()">
+            <button class="pill-btn" onclick="openShareModal('CLASS')" title="產生本班直達網址與 QR Code" style="padding:6px 14px;">分享本班連結</button>
+          </div>
+        </div>
+
+        <!-- STUDENT PERSONAL ELECTIVE PICKER DRAWER -->
+        <div id="myElectivesDrawer" class="my-electives-drawer hidden">
+          <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:10px;">
+            <div>
+              <div style="font-family:var(--font-display); font-weight:600; font-size:var(--fs-base);">設定個人選修組合（自動記憶於此裝置）</div>
+              <div style="font-size:var(--fs-xs); color:var(--muted); margin-top:2px;">揀選後，「我的科目」與下方「本班時間表」將自動只顯示核心科及你修讀的選修科，畫面更清爽。</div>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button class="pill-btn pill-btn-ghost" style="padding:5px 12px;" onclick="clearMyElectives()">清除設定</button>
+              <button class="pill-btn pill-btn-primary" style="padding:5px 14px;" onclick="saveAndApplyMyElectives()">儲存並套用</button>
+            </div>
+          </div>
+          <div class="my-el-grid">
+            <div class="my-el-col">
+              <label id="lblMyX1">選修 X1</label>
+              <select id="selMyX1" class="my-el-select"></select>
+            </div>
+            <div class="my-el-col">
+              <label id="lblMyX2">選修 X2</label>
+              <select id="selMyX2" class="my-el-select"></select>
+            </div>
+            <div class="my-el-col">
+              <label id="lblMyX3">選修 X3</label>
+              <select id="selMyX3" class="my-el-select"></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="subject-cards-grid" id="subjectCardsGrid"></div>
+
+        <!-- SECTION 2: CLASS TIMETABLE -->
+        <div id="classTimetableSection" class="section-block">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title" id="ttSectionTitle">本班時間表</h2>
+              <p class="section-sub">七日循環周課節分佈（括號顯示計算區間內各循環日尚餘次數）</p>
+            </div>
+          </div>
+          <div class="tt-wrap">
+            <table class="tt-table" id="classTimetableGrid"></table>
+            <div class="tt-elective-legend" id="classElectiveLegend"></div>
+          </div>
+        </div>
+
+        <!-- SECTION 3: SCHOOL CALENDAR -->
+        <div id="schoolCalendarSection" class="section-block">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title">校曆表</h2>
+              <p class="section-sub">點擊具循環周標記的日期可切換「計入課堂 / 豁免課堂」（實色代表計入課堂）</p>
+            </div>
+            <button class="pill-btn" onclick="resetOverrides()">重設微調</button>
+          </div>
+          <div class="cal-grid" id="calMonthsContainer"></div>
+        </div>
+      </section>
+
+      <!--ADMIN_PANEL_START-->
+      
+      <!--ADMIN_PANEL_END-->
+    </div>
+  </div>
+  <!--PORTAL_UI_END-->
+
+  <!-- ====================================================================
+       SINGLE-SUBJECT ZEN POSTER VIEW
+       ==================================================================== -->
+  <div id="singleRoot" class="hidden">
+    <div class="poster-screen">
+      <header class="poster-nav">
+        <div>
+          <!--PORTAL_ONLY_BACK_START-->
+          <button id="backBtn" class="pill-btn pill-btn-ghost" onclick="exitSingleView()">← 返回科目總覽</button>
+          <!--PORTAL_ONLY_BACK_END-->
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          <!--PORTAL_ONLY_SHARE_START-->
+          <button id="shareSingleLinkBtn" class="pill-btn" onclick="openShareModal('SUBJECT')">此科直達連結 / QR</button>
+          <!--PORTAL_ONLY_SHARE_END-->
+          <button class="pill-btn" onclick="openStudio()">外觀與字體</button>
+          <!--PORTAL_ONLY_EXPORT_START-->
+          <button id="exportSingleBtn" class="pill-btn pill-btn-primary" onclick="exportSingleSubjectHTML()">匯出單科 HTML</button>
+          <!--PORTAL_ONLY_EXPORT_END-->
+        </div>
+      </header>
+
+      <main class="poster-center">
+        <div class="poster-eyebrow" id="posterEyebrow">6A · BM</div>
+        <h1 class="poster-subject" id="posterSubjectName">企會財（商業管理）</h1>
+
+        <div class="poster-number-row">
+          <span class="poster-hero-num" id="posterHeroNum">--</span>
+          <span class="poster-hero-unit">節</span>
+        </div>
+
+        <div class="poster-hairline" id="posterHairline">
+          <div class="poster-hairline-fill" id="posterHairlineFill" style="width:0%"></div>
+        </div>
+
+        <div class="poster-caption" id="posterPrimaryCaption">--</div>
+        <div class="poster-subcaption hidden" id="posterSecondaryCaption">--</div>
+      </main>
+
+      <footer class="poster-bottom">
+        <button class="pill-btn pill-btn-ghost" onclick="openScheduleModal()" id="openScheduleBtn">查看課堂時間表</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       MODAL: UPCOMING LESSONS TIMELINE
+       ==================================================================== -->
+  <div id="scheduleModal" class="modal-mask" onclick="if(event.target===this)closeScheduleModal()">
+    <div class="modal-sheet">
+      <div class="modal-head">
+        <div>
+          <div style="font-family:var(--font-display); font-weight:600; font-size:var(--fs-base);" id="modalTitle">課堂明細</div>
+          <div style="font-size:var(--fs-xs); color:var(--muted); margin-top:2px;" id="modalMeta">--</div>
+        </div>
+        <button class="pill-btn" style="padding:5px 12px;" onclick="closeScheduleModal()">關閉</button>
+      </div>
+      <div class="modal-body">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0 14px; border-bottom:1px solid var(--border); font-size:var(--fs-xs); color:var(--muted);">
+          <span id="modalRangeInfo">--</span>
+          <label style="display:inline-flex; align-items:center; gap:6px; cursor:pointer;">
+            <input type="checkbox" id="modalDeductToday" checked="" onchange="syncDeductToday(this.checked)">
+            實時扣減今日已完課節
+          </label>
+        </div>
+        <div id="modalTimelineContainer"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       MODAL: DIRECT URL ROUTING & QR CODE GENERATOR (For GitHub Pages)
+       ==================================================================== -->
+  <div id="shareModal" class="modal-mask" onclick="if(event.target===this)closeShareModal()">
+    <div class="modal-sheet" style="max-width:480px;">
+      <div class="modal-head">
+        <div>
+          <div style="font-family:var(--font-display); font-weight:600; font-size:var(--fs-base);" id="shareModalTitle">專屬直達連結與 QR Code</div>
+          <div style="font-size:var(--fs-xs); color:var(--muted); margin-top:2px;" id="shareModalSub">放上 GitHub Pages 後，學生打開此連結會直接進入指定畫面</div>
+        </div>
+        <button class="pill-btn" style="padding:5px 12px;" onclick="closeShareModal()">關閉</button>
+      </div>
+      <div class="modal-body" style="padding:20px 26px 26px;">
+        <div id="shareBaseUrlNotice" class="hidden" style="margin-bottom:12px;">
+          <label style="display:block; font-size:var(--fs-xs); color:var(--muted); margin-bottom:4px;">
+            目前為本地檔案開啟，可輸入你發佈後的 GitHub Pages 網址以預覽正式連結及 QR Code：
+          </label>
+          <input type="text" id="shareBaseUrlInput" class="share-url-input" placeholder="https://keithwebber221.github.io/countdown/" oninput="refreshShareUrlOutput()">
+        </div>
+
+        <label style="display:block; font-size:var(--fs-xs); color:var(--muted); margin-bottom:5px;">專屬直達網址：</label>
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="shareResultUrl" readonly="" class="share-url-input" onclick="this.select()">
+          <button class="pill-btn pill-btn-primary" id="copyShareBtn" onclick="copyShareUrl()" style="padding:0 16px;">複製連結</button>
+        </div>
+
+        <div class="qr-preview-wrap" id="qrPreviewWrap">
+          <img id="shareQrImg" alt="QR Code" width="180" height="180" style="display:block; border-radius:8px;">
+          <div style="font-size:11px; color:#71717A; margin-top:8px;" id="shareQrCaption">掃描直達此頁</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       SLIDE-OVER STUDIO: FONT SIZE, WHITESPACE, COLOR & TYPOGRAPHY
+       ==================================================================== -->
+  <div id="studioMask" class="studio-mask" onclick="if(event.target===this)closeStudio()">
+    <aside class="studio-panel">
+      <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:14px; border-bottom:1px solid #E4E4E7;">
+        <div>
+          <div style="font-size:15px; font-weight:600;">外觀、字體大小與留白設定</div>
+          <div style="font-size:12px; color:#71717A; margin-top:2px;">即時預覽，匯出網頁時會一併保存目前設定</div>
+        </div>
+        <button onclick="closeStudio()" style="padding:6px 14px; border-radius:999px; border:1px solid #E4E4E7; background:#F4F4F5; font-size:12px; font-weight:500; cursor:pointer; color:#18181B;">完成</button>
+      </div>
+
+      <!-- 1. FONT SIZE -->
+      <div>
+        <div class="studio-sec-title">字體大小（預設模版及自由設定）</div>
+        <div class="preset-grid-4" id="sizePresetsGrid"></div>
+
+        <div class="slider-group">
+          <div class="slider-row">
+            <div class="slider-head">
+              <span>內文及介面字級 (px)</span>
+              <input type="number" id="numBasePx" min="12" max="26" step="1" class="num-box" oninput="onCustomSizeInput('base', this.value)">
+            </div>
+            <input type="range" id="rngBasePx" min="12" max="26" step="1" class="range-bar" oninput="onCustomSizeInput('base', this.value)">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-head">
+              <span>科目標題字級 (px)</span>
+              <input type="number" id="numTitlePx" min="20" max="76" step="1" class="num-box" oninput="onCustomSizeInput('title', this.value)">
+            </div>
+            <input type="range" id="rngTitlePx" min="20" max="76" step="1" class="range-bar" oninput="onCustomSizeInput('title', this.value)">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-head">
+              <span>單科倒數大字 (px)</span>
+              <input type="number" id="numHeroPx" min="72" max="300" step="2" class="num-box" oninput="onCustomSizeInput('hero', this.value)">
+            </div>
+            <input type="range" id="rngHeroPx" min="72" max="300" step="2" class="range-bar" oninput="onCustomSizeInput('hero', this.value)">
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. DENSITY & WHITESPACE -->
+      <div>
+        <div class="studio-sec-title">版面文字密度與留白間距</div>
+        <div class="preset-grid-3" id="densityPresetsGrid"></div>
+
+        <div class="slider-group" style="margin-top:10px;">
+          <div class="slider-row">
+            <div class="slider-head">
+              <span>留白呼吸感比例 (%)</span>
+              <input type="number" id="numSpacePct" min="80" max="150" step="5" class="num-box" oninput="onSpaceScaleInput(this.value)">
+            </div>
+            <input type="range" id="rngSpacePct" min="80" max="150" step="5" class="range-bar" oninput="onSpaceScaleInput(this.value)">
+          </div>
+        </div>
+      </div>
+
+      <!-- 2B. GROUP COLOR CODING (CORE / X1 / X2 / X3) -->
+      <div id="studioGroupColorSection">
+        <div class="studio-sec-title">科目組別分色（核心 / X1 / X2 / X3）</div>
+        <div class="preset-grid-3" id="groupModeGrid"></div>
+
+        <div id="groupCustomControls" style="margin-top:10px;">
+          <div class="palette-grid" id="groupQuartetGrid" style="margin-bottom:8px;"></div>
+          <div class="pickers-4">
+            <label class="picker-item"><span>核心科目</span><input type="color" id="pickGrpCORE" oninput="onCustomGroupColor()"></label>
+            <label class="picker-item"><span>選修 X1</span><input type="color" id="pickGrpX1" oninput="onCustomGroupColor()"></label>
+            <label class="picker-item"><span>選修 X2</span><input type="color" id="pickGrpX2" oninput="onCustomGroupColor()"></label>
+            <label class="picker-item"><span>選修 X3</span><input type="color" id="pickGrpX3" oninput="onCustomGroupColor()"></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. COLOR PALETTES & FREE PICKERS -->
+      <div>
+        <div class="studio-sec-title">流行配色模版與自由配色</div>
+        <div class="palette-grid" id="paletteGrid"></div>
+        <div class="pickers-4">
+          <label class="picker-item"><span>背景色</span><input type="color" id="pickBg" oninput="onCustomColor()"></label>
+          <label class="picker-item"><span>卡片色</span><input type="color" id="pickSurface" oninput="onCustomColor()"></label>
+          <label class="picker-item"><span>文字色</span><input type="color" id="pickText" oninput="onCustomColor()"></label>
+          <label class="picker-item"><span>強調色</span><input type="color" id="pickAccent" oninput="onCustomColor()"></label>
+        </div>
+      </div>
+
+      <!-- 4. FONT PRESETS & FREE FONT SELECTOR -->
+      <div>
+        <div class="studio-sec-title">流行字型模版與自由選擇字型</div>
+        <div class="font-stack-list" id="fontStackList"></div>
+
+        <div style="margin-top:10px; display:flex; flex-direction:column; gap:8px;">
+          <select id="systemFontQuickSelect" onchange="if(this.value)applyFontByName(this.value)" style="width:100%; height:36px; padding:0 10px; border:1px solid #E4E4E7; border-radius:8px; font-size:12px; color:#18181B; background:#FAFAFA;">
+            <option value="">快速選擇常用系統／Google 字型...</option>
+            <option value="PingFang HK">蘋方體 PingFang HK (macOS / iPadOS)</option>
+            <option value="Hiragino Sans CNS">冬青黑體 Hiragino Sans</option>
+            <option value="Microsoft JhengHei">微軟正黑體 Microsoft JhengHei</option>
+            <option value="Kaiti TC">標楷體 / 楷體 Kaiti TC</option>
+            <option value="Songti TC">宋體 / 明體 Songti TC</option>
+            <option value="PMingLiU">新細明體 PMingLiU</option>
+            <option value="DM Sans">DM Sans (Google Font)</option>
+            <option value="Outfit">Outfit (Google Font)</option>
+            <option value="Cormorant Garamond">Cormorant Garamond (Google Font)</option>
+            <option value="Space Grotesk">Space Grotesk (Google Font)</option>
+          </select>
+
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="customFontName" placeholder="或直接輸入任何字型名稱..." style="flex:1; height:36px; padding:0 11px; border:1px solid #E4E4E7; border-radius:8px; font-size:12px; color:#18181B; background:#FFF;">
+            <button onclick="applyCustomFont()" style="padding:0 14px; height:36px; border-radius:8px; background:#18181B; color:#FFF; border:none; font-size:12px; cursor:pointer;">套用</button>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+<script>
+// ============================================================================
+// 0. 擷取初始純淨 HTML 模版 (徹底根絕匯出網頁時的 DOM 污染與空白頁 Bug)
+// ============================================================================
+let PRISTINE_DOC_CLONE = null;
+
+// ============================================================================
+// 1. 字典、預設模版與嵌入式設定
+// ============================================================================
+const SUBJECT_DICT = {"CHIN": "中國語文", "ENG": "英國語文", "MATH": "數學", "MACO": "數學（必修部分）", "M2": "數學延伸單元二", "M1": "數學延伸單元一", "CS": "公民與社會發展", "CES": "公民、經濟與社會", "BM": "企會財（商業管理）", "BA": "企會財（會計）", "BAFS": "企業、會計與財務概論", "ECON": "經濟", "PHY": "物理", "CHEM": "化學", "BIO": "生物", "ICT": "資訊及通訊科技", "CL": "電腦認知", "CHIS": "中國歷史", "HIST": "歷史", "GEOG": "地理", "THS": "旅遊與款待", "HMSC": "健康管理與社會關懷", "DAT": "設計與應用科技", "D&T": "設計與科技", "HEC": "家政", "VAD": "視覺藝術（DSE）", "VA": "視覺藝術", "MUS": "音樂", "PTH": "普通話", "SCJ": "綜合科學", "JSSP": "初中物理", "JSSC": "初中化學", "JSSB": "初中生物", "PE": "體育", "MOED": "德育及班主任課", "SS(CHI)": "中文增潤節", "SS(ENG)": "英文增潤節", "SS(MATH)": "數學增潤節"};
+
+const SIZE_PRESETS = [
+  { id: 'compact',   name: '纖巧',     basePx: 14, titlePx: 26, heroPx: 118 },
+  { id: 'standard',  name: '標準',     basePx: 16, titlePx: 36, heroPx: 160 },
+  { id: 'relaxed',   name: '寬朗',     basePx: 18, titlePx: 44, heroPx: 200 },
+  { id: 'projector', name: '投影特大', basePx: 21, titlePx: 54, heroPx: 248 }
+];
+
+const DENSITY_PRESETS = [
+  { id: 'minimal',  name: '極簡留白' },
+  { id: 'balanced', name: '均衡舒展' },
+  { id: 'detailed', name: '完整資訊' }
+];
+
+const GROUP_COLOR_MODES = [
+  { id: 'tinted', name: '柔彩底紋' },
+  { id: 'accent', name: '白底彩標' },
+  { id: 'off',    name: '單色極簡' }
+];
+
+const GROUP_QUARTETS = [
+  { id: 'academy',  name: '書院四色', colors: { CORE: '#2B50AA', X1: '#1F7A5C', X2: '#C25934', X3: '#7B4B94' } },
+  { id: 'morandi',  name: '莫蘭迪霧', colors: { CORE: '#43657B', X1: '#527360', X2: '#A86258', X3: '#786288' } },
+  { id: 'nordic',   name: '北歐晴空', colors: { CORE: '#0F6292', X1: '#16796F', X2: '#C06C2B', X3: '#A63A69' } },
+  { id: 'luminous', name: '夜光霓彩', colors: { CORE: '#7AA2F7', X1: '#4FD6BE', X2: '#FF9E64', X3: '#BB9AF7' } }
+];
+
+const PALETTE_PRESETS = [
+  { id: 'paper-ink',     name: '極簡紙墨',   bg: '#F7F6F2', surface: '#FFFFFF', text: '#18181B', muted: '#78756F', accent: '#18181B' },
+  { id: 'nordic-sage',   name: '北歐鼠尾草', bg: '#F1F4F0', surface: '#FFFFFF', text: '#1E2923', muted: '#68776E', accent: '#2F5241' },
+  { id: 'kyoto-latte',   name: '京都焙茶',   bg: '#F6F0EB', surface: '#FDFBF9', text: '#2D241E', muted: '#86756A', accent: '#7C4D34' },
+  { id: 'oxford-navy',   name: '牛津深藍',   bg: '#F3F6FA', surface: '#FFFFFF', text: '#0F172A', muted: '#64748B', accent: '#1E3A8A' },
+  { id: 'midnight-oled', name: '靜謐黑曜',   bg: '#0E1014', surface: '#171A21', text: '#F4F4F6', muted: '#8B92A2', accent: '#E2E8F0' },
+  { id: 'terracotta',    name: '侘寂赤陶',   bg: '#F8F3EF', surface: '#FFFFFF', text: '#2B211E', muted: '#82706A', accent: '#B85038' },
+  { id: 'mist-lavender', name: '晨霧灰紫',   bg: '#F5F4F8', surface: '#FFFFFF', text: '#231F2E', muted: '#756F86', accent: '#534679' },
+  { id: 'forest-night',  name: '松林深宵',   bg: '#101815', surface: '#18231F', text: '#EBF2EE', muted: '#84988E', accent: '#7CC49F' }
+];
+
+const FONT_PRESETS = [
+  {
+    id: 'modern-sans',
+    name: '現代極簡黑體',
+    sample: 'Inter · 思源黑體',
+    body: "'Inter', 'Noto Sans TC', sans-serif",
+    display: "'Inter', 'Noto Sans TC', sans-serif",
+    num: "'Plus Jakarta Sans', 'Inter', sans-serif"
+  },
+  {
+    id: 'editorial-serif',
+    name: '人文書卷宋體',
+    sample: 'Playfair · 思源宋體',
+    body: "'Noto Serif TC', Georgia, serif",
+    display: "'Playfair Display', 'Noto Serif TC', serif",
+    num: "'Playfair Display', 'Noto Serif TC', serif"
+  },
+  {
+    id: 'wenkai-poetic',
+    name: '溫潤手寫楷書',
+    sample: '霞鶩文楷 WenKai',
+    body: "'LXGW WenKai TC', 'Kaiti TC', serif",
+    display: "'LXGW WenKai TC', 'Kaiti TC', serif",
+    num: "'Plus Jakarta Sans', 'LXGW WenKai TC', sans-serif"
+  },
+  {
+    id: 'maru-soft',
+    name: '日系空氣圓體',
+    sample: 'Zen Maru Gothic',
+    body: "'Zen Maru Gothic', 'Noto Sans TC', sans-serif",
+    display: "'Zen Maru Gothic', 'Noto Sans TC', sans-serif",
+    num: "'Plus Jakarta Sans', 'Zen Maru Gothic', sans-serif"
+  },
+  {
+    id: 'mono-tech',
+    name: '理性等寬數碼',
+    sample: 'JetBrains Mono',
+    body: "'Inter', 'Noto Sans TC', sans-serif",
+    display: "'JetBrains Mono', 'Noto Sans TC', monospace",
+    num: "'JetBrains Mono', monospace"
+  }
+];
+
+/*__APP_CONFIG_START__*/
+const APP_CONFIG = {"mode":"LOCKED","desensitized":true,"calendar":{"schoolName":"","acadYear":"2026/2027","startYear":2026,"endYear":2027,"days":[{"date":"2026-09-01","weekday":2,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":null,"event":""},{"date":"2026-09-02","weekday":3,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":null,"event":""},{"date":"2026-09-03","weekday":4,"cycleDay":1,"cycleWeek":1,"markers":[],"holiday":null,"event":""},{"date":"2026-09-04","weekday":5,"cycleDay":2,"cycleWeek":1,"markers":[],"holiday":null,"event":""},{"date":"2026-09-07","weekday":1,"cycleDay":3,"cycleWeek":1,"markers":[],"holiday":null,"event":""},{"date":"2026-09-08","weekday":2,"cycleDay":4,"cycleWeek":1,"markers":[],"holiday":null,"event":""},{"date":"2026-09-09","weekday":3,"cycleDay":5,"cycleWeek":1,"markers":[],"holiday":null,"event":""},{"date":"2026-09-10","weekday":4,"cycleDay":6,"cycleWeek":1,"markers":[],"holiday":null,"event":""},{"date":"2026-09-11","weekday":5,"cycleDay":7,"cycleWeek":1,"markers":[],"holiday":null,"event":""},{"date":"2026-09-14","weekday":1,"cycleDay":1,"cycleWeek":2,"markers":[],"holiday":null,"event":""},{"date":"2026-09-15","weekday":2,"cycleDay":2,"cycleWeek":2,"markers":[],"holiday":null,"event":""},{"date":"2026-09-16","weekday":3,"cycleDay":3,"cycleWeek":2,"markers":[],"holiday":null,"event":""},{"date":"2026-09-17","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":null,"event":""},{"date":"2026-09-18","weekday":5,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":null,"event":""},{"date":"2026-09-21","weekday":1,"cycleDay":4,"cycleWeek":2,"markers":[],"holiday":null,"event":""},{"date":"2026-09-22","weekday":2,"cycleDay":5,"cycleWeek":2,"markers":[],"holiday":null,"event":""},{"date":"2026-09-23","weekday":3,"cycleDay":6,"cycleWeek":2,"markers":[],"holiday":null,"event":""},{"date":"2026-09-24","weekday":4,"cycleDay":7,"cycleWeek":2,"markers":[],"holiday":null,"event":""},{"date":"2026-09-25","weekday":5,"cycleDay":1,"cycleWeek":3,"markers":[],"holiday":null,"event":""},{"date":"2026-09-28","weekday":1,"cycleDay":2,"cycleWeek":3,"markers":[],"holiday":null,"event":""},{"date":"2026-09-29","weekday":2,"cycleDay":3,"cycleWeek":3,"markers":[],"holiday":null,"event":""},{"date":"2026-09-30","weekday":3,"cycleDay":4,"cycleWeek":3,"markers":[],"holiday":null,"event":""},{"date":"2026-10-01","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"PUBLIC","event":""},{"date":"2026-10-02","weekday":5,"cycleDay":5,"cycleWeek":3,"markers":[],"holiday":null,"event":""},{"date":"2026-10-05","weekday":1,"cycleDay":6,"cycleWeek":3,"markers":[],"holiday":null,"event":""},{"date":"2026-10-06","weekday":2,"cycleDay":7,"cycleWeek":3,"markers":[],"holiday":null,"event":""},{"date":"2026-10-07","weekday":3,"cycleDay":1,"cycleWeek":4,"markers":[],"holiday":null,"event":""},{"date":"2026-10-08","weekday":4,"cycleDay":2,"cycleWeek":4,"markers":[],"holiday":null,"event":""},{"date":"2026-10-09","weekday":5,"cycleDay":3,"cycleWeek":4,"markers":[],"holiday":null,"event":""},{"date":"2026-10-12","weekday":1,"cycleDay":4,"cycleWeek":4,"markers":[],"holiday":null,"event":""},{"date":"2026-10-13","weekday":2,"cycleDay":5,"cycleWeek":4,"markers":[],"holiday":null,"event":""},{"date":"2026-10-14","weekday":3,"cycleDay":6,"cycleWeek":4,"markers":[],"holiday":null,"event":""},{"date":"2026-10-15","weekday":4,"cycleDay":7,"cycleWeek":4,"markers":[],"holiday":null,"event":""},{"date":"2026-10-16","weekday":5,"cycleDay":1,"cycleWeek":5,"markers":[],"holiday":null,"event":""},{"date":"2026-10-19","weekday":1,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"PUBLIC","event":""},{"date":"2026-10-20","weekday":2,"cycleDay":2,"cycleWeek":5,"markers":[],"holiday":null,"event":""},{"date":"2026-10-21","weekday":3,"cycleDay":3,"cycleWeek":5,"markers":[],"holiday":null,"event":""},{"date":"2026-10-22","weekday":4,"cycleDay":4,"cycleWeek":5,"markers":[],"holiday":null,"event":""},{"date":"2026-10-23","weekday":5,"cycleDay":5,"cycleWeek":5,"markers":[],"holiday":null,"event":""},{"date":"2026-10-26","weekday":1,"cycleDay":6,"cycleWeek":5,"markers":[],"holiday":null,"event":""},{"date":"2026-10-27","weekday":2,"cycleDay":7,"cycleWeek":5,"markers":[],"holiday":null,"event":""},{"date":"2026-10-28","weekday":3,"cycleDay":1,"cycleWeek":6,"markers":[],"holiday":null,"event":""},{"date":"2026-10-29","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":null,"event":""},{"date":"2026-10-30","weekday":5,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":null,"event":""},{"date":"2026-11-02","weekday":1,"cycleDay":null,"cycleWeek":null,"markers":["T","M"],"holiday":null,"event":""},{"date":"2026-11-03","weekday":2,"cycleDay":null,"cycleWeek":null,"markers":["T","M"],"holiday":null,"event":""},{"date":"2026-11-04","weekday":3,"cycleDay":null,"cycleWeek":null,"markers":["T","M"],"holiday":null,"event":""},{"date":"2026-11-05","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":["T","M"],"holiday":null,"event":""},{"date":"2026-11-06","weekday":5,"cycleDay":null,"cycleWeek":null,"markers":["T","M"],"holiday":null,"event":""},{"date":"2026-11-09","weekday":1,"cycleDay":2,"cycleWeek":6,"markers":["M"],"holiday":null,"event":""},{"date":"2026-11-10","weekday":2,"cycleDay":3,"cycleWeek":6,"markers":["M"],"holiday":null,"event":""},{"date":"2026-11-11","weekday":3,"cycleDay":4,"cycleWeek":6,"markers":["M"],"holiday":null,"event":""},{"date":"2026-11-12","weekday":4,"cycleDay":5,"cycleWeek":6,"markers":["M"],"holiday":null,"event":""},{"date":"2026-11-13","weekday":5,"cycleDay":6,"cycleWeek":6,"markers":["M"],"holiday":null,"event":""},{"date":"2026-11-16","weekday":1,"cycleDay":7,"cycleWeek":6,"markers":[],"holiday":null,"event":""},{"date":"2026-11-17","weekday":2,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2026-11-18","weekday":3,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2026-11-19","weekday":4,"cycleDay":1,"cycleWeek":7,"markers":[],"holiday":null,"event":""},{"date":"2026-11-20","weekday":5,"cycleDay":2,"cycleWeek":7,"markers":[],"holiday":null,"event":""},{"date":"2026-11-23","weekday":1,"cycleDay":3,"cycleWeek":7,"markers":[],"holiday":null,"event":""},{"date":"2026-11-24","weekday":2,"cycleDay":4,"cycleWeek":7,"markers":[],"holiday":null,"event":""},{"date":"2026-11-25","weekday":3,"cycleDay":5,"cycleWeek":7,"markers":[],"holiday":null,"event":""},{"date":"2026-11-26","weekday":4,"cycleDay":6,"cycleWeek":7,"markers":[],"holiday":null,"event":""},{"date":"2026-11-27","weekday":5,"cycleDay":7,"cycleWeek":7,"markers":[],"holiday":null,"event":""},{"date":"2026-11-30","weekday":1,"cycleDay":1,"cycleWeek":8,"markers":[],"holiday":null,"event":""},{"date":"2026-12-01","weekday":2,"cycleDay":2,"cycleWeek":8,"markers":[],"holiday":null,"event":""},{"date":"2026-12-02","weekday":3,"cycleDay":3,"cycleWeek":8,"markers":[],"holiday":null,"event":""},{"date":"2026-12-03","weekday":4,"cycleDay":4,"cycleWeek":8,"markers":[],"holiday":null,"event":""},{"date":"2026-12-04","weekday":5,"cycleDay":5,"cycleWeek":8,"markers":[],"holiday":null,"event":""},{"date":"2026-12-07","weekday":1,"cycleDay":6,"cycleWeek":8,"markers":[],"holiday":null,"event":""},{"date":"2026-12-08","weekday":2,"cycleDay":7,"cycleWeek":8,"markers":[],"holiday":null,"event":""},{"date":"2026-12-09","weekday":3,"cycleDay":1,"cycleWeek":9,"markers":[],"holiday":null,"event":""},{"date":"2026-12-10","weekday":4,"cycleDay":2,"cycleWeek":9,"markers":[],"holiday":null,"event":""},{"date":"2026-12-11","weekday":5,"cycleDay":3,"cycleWeek":9,"markers":[],"holiday":null,"event":""},{"date":"2026-12-14","weekday":1,"cycleDay":4,"cycleWeek":9,"markers":[],"holiday":null,"event":""},{"date":"2026-12-15","weekday":2,"cycleDay":5,"cycleWeek":9,"markers":[],"holiday":null,"event":""},{"date":"2026-12-16","weekday":3,"cycleDay":6,"cycleWeek":9,"markers":[],"holiday":null,"event":""},{"date":"2026-12-17","weekday":4,"cycleDay":7,"cycleWeek":9,"markers":[],"holiday":null,"event":""},{"date":"2026-12-18","weekday":5,"cycleDay":1,"cycleWeek":10,"markers":[],"holiday":null,"event":""},{"date":"2026-12-21","weekday":1,"cycleDay":2,"cycleWeek":10,"markers":[],"holiday":null,"event":""},{"date":"2026-12-22","weekday":2,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2026-12-23","weekday":3,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2026-12-24","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2026-12-25","weekday":5,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"PUBLIC","event":""},{"date":"2026-12-28","weekday":1,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2026-12-29","weekday":2,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2026-12-30","weekday":3,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2026-12-31","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-01-01","weekday":5,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"PUBLIC","event":""},{"date":"2027-01-04","weekday":1,"cycleDay":3,"cycleWeek":10,"markers":["E"],"holiday":null,"event":""},{"date":"2027-01-05","weekday":2,"cycleDay":4,"cycleWeek":10,"markers":["E"],"holiday":null,"event":""},{"date":"2027-01-06","weekday":3,"cycleDay":5,"cycleWeek":10,"markers":[],"holiday":null,"event":""},{"date":"2027-01-07","weekday":4,"cycleDay":6,"cycleWeek":10,"markers":["E"],"holiday":null,"event":""},{"date":"2027-01-08","weekday":5,"cycleDay":7,"cycleWeek":10,"markers":["E"],"holiday":null,"event":""},{"date":"2027-01-11","weekday":1,"cycleDay":1,"cycleWeek":11,"markers":["E"],"holiday":null,"event":""},{"date":"2027-01-12","weekday":2,"cycleDay":2,"cycleWeek":11,"markers":["E"],"holiday":null,"event":""},{"date":"2027-01-13","weekday":3,"cycleDay":3,"cycleWeek":11,"markers":["E"],"holiday":null,"event":""},{"date":"2027-01-14","weekday":4,"cycleDay":4,"cycleWeek":11,"markers":["E"],"holiday":null,"event":""},{"date":"2027-01-15","weekday":5,"cycleDay":5,"cycleWeek":11,"markers":["E"],"holiday":null,"event":""},{"date":"2027-01-18","weekday":1,"cycleDay":6,"cycleWeek":11,"markers":["E"],"holiday":null,"event":""},{"date":"2027-01-19","weekday":2,"cycleDay":7,"cycleWeek":11,"markers":["M"],"holiday":null,"event":""},{"date":"2027-01-20","weekday":3,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":null,"event":""},{"date":"2027-01-21","weekday":4,"cycleDay":1,"cycleWeek":12,"markers":["M"],"holiday":null,"event":""},{"date":"2027-01-22","weekday":5,"cycleDay":2,"cycleWeek":12,"markers":["M"],"holiday":null,"event":""},{"date":"2027-01-25","weekday":1,"cycleDay":3,"cycleWeek":12,"markers":["M"],"holiday":null,"event":""},{"date":"2027-01-26","weekday":2,"cycleDay":4,"cycleWeek":12,"markers":["M"],"holiday":null,"event":""},{"date":"2027-01-27","weekday":3,"cycleDay":5,"cycleWeek":12,"markers":["M"],"holiday":null,"event":""},{"date":"2027-01-28","weekday":4,"cycleDay":6,"cycleWeek":12,"markers":["M"],"holiday":null,"event":""},{"date":"2027-01-29","weekday":5,"cycleDay":7,"cycleWeek":12,"markers":["M"],"holiday":null,"event":""},{"date":"2027-02-01","weekday":1,"cycleDay":1,"cycleWeek":13,"markers":["M"],"holiday":null,"event":""},{"date":"2027-02-02","weekday":2,"cycleDay":2,"cycleWeek":13,"markers":["M"],"holiday":null,"event":""},{"date":"2027-02-03","weekday":3,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-02-04","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-02-05","weekday":5,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-02-08","weekday":1,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"PUBLIC","event":""},{"date":"2027-02-09","weekday":2,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"PUBLIC","event":""},{"date":"2027-02-10","weekday":3,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-02-11","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-02-12","weekday":5,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-02-15","weekday":1,"cycleDay":3,"cycleWeek":13,"markers":[],"holiday":null,"event":""},{"date":"2027-02-16","weekday":2,"cycleDay":4,"cycleWeek":13,"markers":[],"holiday":null,"event":""},{"date":"2027-02-17","weekday":3,"cycleDay":5,"cycleWeek":13,"markers":[],"holiday":null,"event":""},{"date":"2027-02-18","weekday":4,"cycleDay":6,"cycleWeek":13,"markers":[],"holiday":null,"event":""},{"date":"2027-02-19","weekday":5,"cycleDay":7,"cycleWeek":13,"markers":[],"holiday":null,"event":""},{"date":"2027-02-22","weekday":1,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-02-23","weekday":2,"cycleDay":1,"cycleWeek":14,"markers":[],"holiday":null,"event":""},{"date":"2027-02-24","weekday":3,"cycleDay":2,"cycleWeek":14,"markers":[],"holiday":null,"event":""},{"date":"2027-02-25","weekday":4,"cycleDay":3,"cycleWeek":14,"markers":[],"holiday":null,"event":""},{"date":"2027-02-26","weekday":5,"cycleDay":4,"cycleWeek":14,"markers":[],"holiday":null,"event":""},{"date":"2027-03-01","weekday":1,"cycleDay":5,"cycleWeek":14,"markers":[],"holiday":null,"event":""},{"date":"2027-03-02","weekday":2,"cycleDay":6,"cycleWeek":14,"markers":[],"holiday":null,"event":""},{"date":"2027-03-03","weekday":3,"cycleDay":7,"cycleWeek":14,"markers":[],"holiday":null,"event":""},{"date":"2027-03-04","weekday":4,"cycleDay":1,"cycleWeek":15,"markers":[],"holiday":null,"event":""},{"date":"2027-03-05","weekday":5,"cycleDay":2,"cycleWeek":15,"markers":[],"holiday":null,"event":""},{"date":"2027-03-08","weekday":1,"cycleDay":3,"cycleWeek":15,"markers":[],"holiday":null,"event":""},{"date":"2027-03-09","weekday":2,"cycleDay":4,"cycleWeek":15,"markers":[],"holiday":null,"event":""},{"date":"2027-03-10","weekday":3,"cycleDay":5,"cycleWeek":15,"markers":[],"holiday":null,"event":""},{"date":"2027-03-11","weekday":4,"cycleDay":6,"cycleWeek":15,"markers":[],"holiday":null,"event":""},{"date":"2027-03-12","weekday":5,"cycleDay":7,"cycleWeek":15,"markers":[],"holiday":null,"event":""},{"date":"2027-03-15","weekday":1,"cycleDay":1,"cycleWeek":16,"markers":[],"holiday":null,"event":""},{"date":"2027-03-16","weekday":2,"cycleDay":2,"cycleWeek":16,"markers":[],"holiday":null,"event":""},{"date":"2027-03-17","weekday":3,"cycleDay":3,"cycleWeek":16,"markers":[],"holiday":null,"event":""},{"date":"2027-03-18","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-03-19","weekday":5,"cycleDay":null,"cycleWeek":null,"markers":["T"],"holiday":null,"event":""},{"date":"2027-03-22","weekday":1,"cycleDay":null,"cycleWeek":null,"markers":["T"],"holiday":null,"event":""},{"date":"2027-03-23","weekday":2,"cycleDay":null,"cycleWeek":null,"markers":["T"],"holiday":null,"event":""},{"date":"2027-03-24","weekday":3,"cycleDay":null,"cycleWeek":null,"markers":["T"],"holiday":null,"event":""},{"date":"2027-03-25","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":["T"],"holiday":null,"event":""},{"date":"2027-03-26","weekday":5,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"PUBLIC","event":""},{"date":"2027-03-29","weekday":1,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"PUBLIC","event":""},{"date":"2027-03-30","weekday":2,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-03-31","weekday":3,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-04-01","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-04-02","weekday":5,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-04-05","weekday":1,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"PUBLIC","event":""},{"date":"2027-04-06","weekday":2,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-04-07","weekday":3,"cycleDay":4,"cycleWeek":16,"markers":[],"holiday":null,"event":""},{"date":"2027-04-08","weekday":4,"cycleDay":5,"cycleWeek":16,"markers":[],"holiday":null,"event":""},{"date":"2027-04-09","weekday":5,"cycleDay":6,"cycleWeek":16,"markers":[],"holiday":null,"event":""},{"date":"2027-04-12","weekday":1,"cycleDay":7,"cycleWeek":16,"markers":[],"holiday":null,"event":""},{"date":"2027-04-13","weekday":2,"cycleDay":1,"cycleWeek":17,"markers":[],"holiday":null,"event":""},{"date":"2027-04-14","weekday":3,"cycleDay":2,"cycleWeek":17,"markers":[],"holiday":null,"event":""},{"date":"2027-04-15","weekday":4,"cycleDay":3,"cycleWeek":17,"markers":[],"holiday":null,"event":""},{"date":"2027-04-16","weekday":5,"cycleDay":4,"cycleWeek":17,"markers":[],"holiday":null,"event":""},{"date":"2027-04-19","weekday":1,"cycleDay":5,"cycleWeek":17,"markers":[],"holiday":null,"event":""},{"date":"2027-04-20","weekday":2,"cycleDay":6,"cycleWeek":17,"markers":[],"holiday":null,"event":""},{"date":"2027-04-21","weekday":3,"cycleDay":7,"cycleWeek":17,"markers":[],"holiday":null,"event":""},{"date":"2027-04-22","weekday":4,"cycleDay":1,"cycleWeek":18,"markers":[],"holiday":null,"event":""},{"date":"2027-04-23","weekday":5,"cycleDay":2,"cycleWeek":18,"markers":[],"holiday":null,"event":""},{"date":"2027-04-26","weekday":1,"cycleDay":3,"cycleWeek":18,"markers":[],"holiday":null,"event":""},{"date":"2027-04-27","weekday":2,"cycleDay":4,"cycleWeek":18,"markers":[],"holiday":null,"event":""},{"date":"2027-04-28","weekday":3,"cycleDay":5,"cycleWeek":18,"markers":[],"holiday":null,"event":""},{"date":"2027-04-29","weekday":4,"cycleDay":6,"cycleWeek":18,"markers":[],"holiday":null,"event":""},{"date":"2027-04-30","weekday":5,"cycleDay":7,"cycleWeek":18,"markers":[],"holiday":null,"event":""},{"date":"2027-05-03","weekday":1,"cycleDay":1,"cycleWeek":19,"markers":[],"holiday":null,"event":""},{"date":"2027-05-04","weekday":2,"cycleDay":2,"cycleWeek":19,"markers":[],"holiday":null,"event":""},{"date":"2027-05-05","weekday":3,"cycleDay":3,"cycleWeek":19,"markers":[],"holiday":null,"event":""},{"date":"2027-05-06","weekday":4,"cycleDay":4,"cycleWeek":19,"markers":[],"holiday":null,"event":""},{"date":"2027-05-07","weekday":5,"cycleDay":5,"cycleWeek":19,"markers":[],"holiday":null,"event":""},{"date":"2027-05-10","weekday":1,"cycleDay":6,"cycleWeek":19,"markers":[],"holiday":null,"event":""},{"date":"2027-05-11","weekday":2,"cycleDay":7,"cycleWeek":19,"markers":[],"holiday":null,"event":""},{"date":"2027-05-12","weekday":3,"cycleDay":1,"cycleWeek":20,"markers":[],"holiday":null,"event":""},{"date":"2027-05-13","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"PUBLIC","event":""},{"date":"2027-05-14","weekday":5,"cycleDay":2,"cycleWeek":20,"markers":[],"holiday":null,"event":""},{"date":"2027-05-17","weekday":1,"cycleDay":3,"cycleWeek":20,"markers":[],"holiday":null,"event":""},{"date":"2027-05-18","weekday":2,"cycleDay":4,"cycleWeek":20,"markers":[],"holiday":null,"event":""},{"date":"2027-05-19","weekday":3,"cycleDay":5,"cycleWeek":20,"markers":[],"holiday":null,"event":""},{"date":"2027-05-20","weekday":4,"cycleDay":6,"cycleWeek":20,"markers":[],"holiday":null,"event":""},{"date":"2027-05-21","weekday":5,"cycleDay":7,"cycleWeek":20,"markers":[],"holiday":null,"event":""},{"date":"2027-05-24","weekday":1,"cycleDay":1,"cycleWeek":21,"markers":[],"holiday":null,"event":""},{"date":"2027-05-25","weekday":2,"cycleDay":2,"cycleWeek":21,"markers":[],"holiday":null,"event":""},{"date":"2027-05-26","weekday":3,"cycleDay":3,"cycleWeek":21,"markers":[],"holiday":null,"event":""},{"date":"2027-05-27","weekday":4,"cycleDay":4,"cycleWeek":21,"markers":[],"holiday":null,"event":""},{"date":"2027-05-28","weekday":5,"cycleDay":5,"cycleWeek":21,"markers":[],"holiday":null,"event":""},{"date":"2027-05-31","weekday":1,"cycleDay":6,"cycleWeek":21,"markers":[],"holiday":null,"event":""},{"date":"2027-06-01","weekday":2,"cycleDay":7,"cycleWeek":21,"markers":[],"holiday":null,"event":""},{"date":"2027-06-02","weekday":3,"cycleDay":1,"cycleWeek":22,"markers":[],"holiday":null,"event":""},{"date":"2027-06-03","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":null,"event":""},{"date":"2027-06-04","weekday":5,"cycleDay":null,"cycleWeek":null,"markers":["E"],"holiday":null,"event":""},{"date":"2027-06-07","weekday":1,"cycleDay":null,"cycleWeek":null,"markers":["E"],"holiday":null,"event":""},{"date":"2027-06-08","weekday":2,"cycleDay":null,"cycleWeek":null,"markers":["E"],"holiday":null,"event":""},{"date":"2027-06-09","weekday":3,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"PUBLIC","event":""},{"date":"2027-06-10","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":["E"],"holiday":null,"event":""},{"date":"2027-06-11","weekday":5,"cycleDay":null,"cycleWeek":null,"markers":["E"],"holiday":null,"event":""},{"date":"2027-06-14","weekday":1,"cycleDay":null,"cycleWeek":null,"markers":["E"],"holiday":null,"event":""},{"date":"2027-06-15","weekday":2,"cycleDay":null,"cycleWeek":null,"markers":["E"],"holiday":null,"event":""},{"date":"2027-06-16","weekday":3,"cycleDay":null,"cycleWeek":null,"markers":["E"],"holiday":null,"event":""},{"date":"2027-06-17","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":["E"],"holiday":null,"event":""},{"date":"2027-06-18","weekday":5,"cycleDay":null,"cycleWeek":null,"markers":["E"],"holiday":null,"event":""},{"date":"2027-06-21","weekday":1,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":null,"event":""},{"date":"2027-06-22","weekday":2,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":null,"event":""},{"date":"2027-06-23","weekday":3,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":null,"event":""},{"date":"2027-06-24","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":null,"event":""},{"date":"2027-06-25","weekday":5,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":null,"event":""},{"date":"2027-06-28","weekday":1,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":null,"event":""},{"date":"2027-06-29","weekday":2,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":null,"event":""},{"date":"2027-06-30","weekday":3,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":null,"event":""},{"date":"2027-07-01","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"PUBLIC","event":""},{"date":"2027-07-02","weekday":5,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-07-05","weekday":1,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":null,"event":""},{"date":"2027-07-06","weekday":2,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":null,"event":""},{"date":"2027-07-07","weekday":3,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":null,"event":""},{"date":"2027-07-08","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":null,"event":""},{"date":"2027-07-09","weekday":5,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":null,"event":""},{"date":"2027-07-12","weekday":1,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-07-13","weekday":2,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-07-14","weekday":3,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-07-15","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-07-16","weekday":5,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-07-19","weekday":1,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-07-20","weekday":2,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-07-21","weekday":3,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-07-22","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-07-23","weekday":5,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-07-26","weekday":1,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-07-27","weekday":2,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-07-28","weekday":3,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-07-29","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-07-30","weekday":5,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-08-02","weekday":1,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-08-03","weekday":2,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-08-04","weekday":3,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-08-05","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-08-06","weekday":5,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-08-09","weekday":1,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-08-10","weekday":2,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-08-11","weekday":3,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-08-12","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-08-13","weekday":5,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-08-16","weekday":1,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-08-17","weekday":2,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-08-18","weekday":3,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-08-19","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-08-20","weekday":5,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-08-23","weekday":1,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-08-24","weekday":2,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-08-25","weekday":3,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-08-26","weekday":4,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-08-27","weekday":5,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-08-30","weekday":1,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""},{"date":"2027-08-31","weekday":2,"cycleDay":null,"cycleWeek":null,"markers":[],"holiday":"SCHOOL","event":""}]},"classesRaw":{"S1-1A":{"sheetName":"S1-1A","form":"S1","className":"1A","teachers":"","room":"C105","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["ENG C105","ENG T403","GEOG C105","MATH C105","CHIS C105","MATH C105","SCJ M401"],["ENG C105","CHIN C105","ENG C105","MATH C105","SCJ C105","MATH C105","CHIS C105"],["PE PG","MUS T302","CHIN C105","SCJ C105","MATH C105","HIST C105","CHIN C105"],["PE PG","MUS T302","CHIN C105","PTH C105","MATH C105","CES C105","CHIN C105"],["CHIN C105","VA M202","D&T T002\nHEC M102","ENG C105","ENG C105","ENG C105","MATH C105"],["CHIN C105","VA M202","D&T T002\nHEC M102","GEOG C105","ENG C105","ENG C105","MATH C105"],["MATH C105","CES C105","SCJ M401","HIST C105","CL T403","CHIN C105","ENG C105"],["MOED C105","SCJ M401","SCJ M401","CHIN C105","CL T403","CHIN C105","ENG C105"]],"electivesRaw":{}},"S1-1B":{"sheetName":"S1-1B","form":"S1","className":"1B","teachers":"","room":"C104","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["CL T403","HIST C104","SCJ M401","ENG C104","ENG C104","CHIN C104","ENG C104"],["CL T403","ENG T403","SCJ M401","ENG C104","ENG C104","CHIN C104","HIST C104"],["PE PG","CHIN C104","D&T T002\nHEC M102","MUS T302","MATH C104","MATH C104","SCJ C104"],["PE PG","CHIN C104","D&T T002\nHEC M102","MUS T302","MATH C104","MATH C104","CHIS C104"],["ENG C104","MATH C104","MATH C104","PTH C104","CHIN C104","ENG C104","MATH C104"],["SCJ M401","MATH C104","MATH C104","CHIS C104","CHIN C104","ENG C104","CES C104"],["CHIN C104","SCJ C104","ENG C104","CES C104","GEOG C104","VA M202","CHIN C104"],["MOED C104","GEOG C104","ENG C104","CHIN C104","SCJ M401","VA M202","CHIN C104"]],"electivesRaw":{}},"S1-1C":{"sheetName":"S1-1C","form":"S1","className":"1C","teachers":"","room":"C103","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["MATH C103","SCJ M401","SCJ C103","ENG C103","SCJ M401","ENG C103","ENG T403"],["MATH C103","SCJ M401","CHIS C103","ENG C103","CES C103","ENG C103","CES C103"],["ENG C103","D&T T002\nHEC M102","MATH C103","MATH C103","ENG C103","CHIS C103","PE PG"],["GEOG C103","D&T T002\nHEC M102","MATH C103","MATH C103","ENG C103","HIST C103","PE PG"],["SCJ C103","GEOG C103","ENG C103","VA M202","CL T403","MATH C103","CHIN C103"],["CHIN C103","ENG C103","ENG C103","VA M202","CL T403","MATH C103","CHIN C103"],["HIST C103","CHIN C103","CHIN C103","CHIN C103","MUS T302","CHIN C103","MATH C103"],["MOED C103","PTH C103","CHIN C103","CHIN C103","MUS T302","CHIN C103","SCJ M401"]],"electivesRaw":{}},"S1-1D":{"sheetName":"S1-1D","form":"S1","className":"1D","teachers":"","room":"C102","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["VA M202","D&T T002\nHEC M102","CHIN C102","PTH C102","MATH C102","SCJ M401","ENG C102"],["VA M202","D&T T002\nHEC M102","CHIN C102","GEOG C102","MATH C102","SCJ M401","ENG C102"],["MATH C102","CL T403","ENG C102","HIST C102","SCJ C102","CHIN C102","PE PG"],["MATH C102","CL T403","ENG C102","CHIN C102","HIST C102","CHIN C102","PE PG"],["ENG C102","SCJ C102","MATH C102","MATH C102","CHIN C102","MUS T302","MATH C102"],["ENG C102","CHIN C102","MATH C102","ENG C102","CHIN C102","MUS T302","MATH C102"],["SCJ M401","ENG C102","CHIS C102","CES C102","ENG C102","GEOG C102","CHIN C102"],["MOED C102","CHIS C102","CES C102","SCJ M401","ENG C102","ENG T403","CHIN C102"]],"electivesRaw":{}},"S2-2A":{"sheetName":"S2-2A","form":"S2","className":"2A","teachers":"","room":"C101","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["ENG C101","SCJ M501","HIST C101","ENG C101","SCJ M501","MATH C101","CHIS C101"],["ENG C101","CES C101","CHIS C101","CHIN C101","CHIN C101","MATH C101","SCJ C101"],["CL T403","ENG C101","GEOG C101","MATH C101","VA M202","ENG C101","MATH C101"],["CL T403","ENG C101","ENG C101","MATH C101","VA M202","PTH C101","MATH C101"],["MUS T302","CHIN C101","MATH C101","D&T T002\nHEC M102","PE PG","GEOG C101","CHIN C101"],["MUS T302","CHIN C101","SCJ C101","D&T T002\nHEC M102","PE PG","CES C101","CHIN C101"],["HIST C101","MATH C101","CHIN C101","SCJ M501","ENG C101","CHIN C101","ENG C101"],["MOED C101","MATH C101","CHIN C101","SCJ M501","ENG C101","CHIN C101","ENG C101"]],"electivesRaw":{}},"S2-2B":{"sheetName":"S2-2B","form":"S2","className":"2B","teachers":"","room":"C207","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["CHIN C207","MUS T302","SCJ M501","MATH C207","D&T T002\nHEC M102","VA M202","MATH C207"],["CHIN C207","MUS T302","ENG C207","MATH C207","D&T T002\nHEC M102","VA M202","HIST C207"],["CHIS C207","ENG C207","CL T403","ENG C207","SCJ M501","MATH C207","CHIN C207"],["ENG C207","ENG C207","CL T403","ENG C207","SCJ M501","MATH C207","CHIN C207"],["MATH C207","CHIN C207","CHIN C207","GEOG C207","PE PG","ENG C207","CES C207"],["MATH C207","CES C207","CHIN C207","CHIS C207","PE PG","ENG C207","GEOG C207"],["SCJ M501","SCJ C207","MATH C207","HIST C207","ENG C207","CHIN C207","ENG C207"],["MOED C207","PTH C207","MATH C207","SCJ C207","CHIN C207","CHIN C207","ENG C207"]],"electivesRaw":{}},"S2-2C":{"sheetName":"S2-2C","form":"S2","className":"2C","teachers":"","room":"C206","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["ENG C206","MATH C206","CHIS C206","VA M202","MATH C206","MUS T302","SCJ M501"],["CES C206","MATH C206","GEOG C206","VA M202","MATH C206","MUS T302","SCJ M501"],["CHIN C206","CHIN C206","MATH C206","ENG C206","CHIN C206","CHIN C206","CHIN C206"],["CHIN C206","CHIN C206","MATH C206","CHIS C206","CHIN C206","HIST C206","CHIN C206"],["MATH C206","ENG C206","CL T403","SCJ C206","ENG C206","ENG C206","PE PG"],["MATH C206","ENG C206","CL T403","CHIN C206","ENG C206","GEOG C206","PE PG"],["SCJ C206","HIST C206","ENG C206","PTH C206","D&T T002\nHEC M102","CES C206","ENG C206"],["MOED C206","SCJ M501","ENG C206","MATH C206","D&T T002\nHEC M102","SCJ M501","ENG C206"]],"electivesRaw":{}},"S2-2D":{"sheetName":"S2-2D","form":"S2","className":"2D","teachers":"","room":"C205","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["SCJ M501","CHIN C205","CHIN C205","MUS T302","CHIN C205","SCJ M501","PTH C205"],["CES C205","CHIN C205","CHIN C205","MUS T302","CHIN C205","SCJ M501","CHIN C205"],["ENG C205","ENG C205","ENG C205","D&T T002\nHEC M102","MATH C205","ENG C205","VA M202"],["ENG C205","ENG C205","ENG C205","D&T T002\nHEC M102","MATH C205","CHIN C205","VA M202"],["CHIN C205","MATH C205","HIST C205","HIST C205","GEOG C205","CL T403","PE PG"],["CHIN C205","MATH C205","CHIS C205","SCJ C205","CES C205","CL T403","PE PG"],["GEOG C205","SCJ C205","MATH C205","MATH C205","ENG C205","MATH C205","ENG C205"],["MOED C205","CHIS C205","MATH C205","ENG C205","SCJ M501","MATH C205","ENG C205"]],"electivesRaw":{}},"S3-3A":{"sheetName":"S3-3A","form":"S3","className":"3A","teachers":"","room":"C204","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["CHIN C204","PE PG","CHIN C204","JSSB M401","CES C204","CHIN C204","MUS T302"],["CHIN C204","PE PG","CHIN C204","ENG C204","HIST C204","CHIN C204","MUS T302"],["JSSC M501","ENG C204","GEOG C204","CL T403","CHIS C204","ENG C204","MATH C204"],["JSSC M501","ENG C204","HIST C204","CL T403","CHIN C204","ENG C204","CHIN C204"],["JSSP M301","MATH C204","ENG C204","MATH C204","MATH C204","CHIS C204","CES C204"],["JSSP M301","MATH C204","ENG C204","MATH C204","MATH C204","JSSB M401","GEOG C204"],["ENG C204","VA M202","MATH C204","CHIN C204","ENG C204","D&T T002\nHEC M102","PTH C204"],["MOED C204","VA M202","MATH C204","CHIN C204","ENG C204","D&T T002\nHEC M102","ENG C204"]],"electivesRaw":{}},"S3-3B":{"sheetName":"S3-3B","form":"S3","className":"3B","teachers":"","room":"C203","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["D&T T002\nHEC M102","ENG C203","MATH C203","CHIN C203","JSSP M301","ENG C203","CHIN C203"],["D&T T002\nHEC M102","ENG C203","MATH C203","GEOG C203","JSSP M301","CES C203","CHIN C203"],["JSSB M401","VA M202","ENG C203","ENG C203","ENG C203","GEOG C203","MATH C203"],["HIST C203","VA M202","ENG C203","JSSB M401","ENG C203","CHIS C203","MATH C203"],["MATH C203","CHIN C203","CHIN C203","JSSC M501","CHIN C203","MATH C203","ENG C203"],["ENG C203","CHIN C203","CHIN C203","JSSC M501","CHIN C203","MATH C203","ENG C203"],["CHIN C203","MATH C203","CES C203","MUS T302","PE PG","PTH C203","CL T403"],["MOED C203","MATH C203","CHIS C203","MUS T302","PE PG","HIST C203","CL T403"]],"electivesRaw":{}},"S3-3C":{"sheetName":"S3-3C","form":"S3","className":"3C","teachers":"","room":"C202","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["CES C202","PE PG","VA M202","JSSP M301","MATH C202","CHIN C202","CHIS C202"],["CHIN C202","PE PG","VA M202","JSSP M301","MATH C202","CHIN C202","JSSB M401"],["ENG C202","GEOG C202","JSSB M401","JSSC M501","CHIN C202","MUS T302","ENG C202"],["ENG C202","CES C202","MATH C202","JSSC M501","CHIN C202","MUS T302","GEOG C202"],["MATH C202","CHIS C202","ENG C202","CL T403","HIST C202","D&T T002\nHEC M102","CHIN C202"],["MATH C202","ENG C202","ENG C202","CL T403","PTH C202","D&T T002\nHEC M102","CHIN C202"],["HIST C202","MATH C202","CHIN C202","ENG C202","ENG C202","ENG C202","MATH C202"],["MOED C202","MATH C202","CHIN C202","CHIN C202","ENG C202","ENG C202","MATH C202"]],"electivesRaw":{}},"S3-3D":{"sheetName":"S3-3D","form":"S3","className":"3D","teachers":"","room":"C201","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["MUS T302","ENG C201","CHIN C201","CHIN C201","CL T403","ENG C201","CHIN C201"],["MUS T302","ENG C201","CHIN C201","CHIN C201","CL T403","ENG C201","CHIN C201"],["D&T T002\nHEC M102","MATH C201","ENG C201","ENG C201","JSSP M301","MATH C201","MATH C201"],["D&T T002\nHEC M102","MATH C201","ENG C201","CES C201","JSSP M301","MATH C201","ENG C201"],["JSSB M401","GEOG C201","MATH C201","MATH C201","ENG C201","CES C201","HIST C201"],["ENG C201","CHIS C201","MATH C201","MATH C201","ENG C201","CHIN C201","JSSB M401"],["CHIN C201","CHIN C201","GEOG C201","VA M202","PE PG","CHIS C201","JSSC M501"],["MOED C201","CHIN C201","PTH C201","VA M202","PE PG","HIST C201","JSSC M501"]],"electivesRaw":{}},"S4-4A":{"sheetName":"S4-4A","form":"S4","className":"4A","teachers":"","room":"C307","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["MACO C307","X3","ENG C307","X1","CS C307","PE PG","X2"],["MACO C307","X3","ENG C307","X1","CS C307","PE PG","X2"],["X2","MACO C307","CHIN C307","X3","MACO C307","X1","ENG C307"],["X2","MACO C307","CHIN C307","X3","ENG C307","X1","MACO C307"],["X1","CHIN C307","X2","CS C307","CHIN C307","X3","CHIN C307"],["X1","CHIN C307","X2","ENG C307","CHIN C307","X3","CHIN C307"],["CHIN C307","ENG C307","X1","MACO C307","X2","ENG C307","X3"],["MOED C307","ENG C307","X1","MACO C307","X2","ENG C307","X3"]],"electivesRaw":{"X1":"CHEM (M501/C307) / DAT T002 / ECON C306 / ICT T403 / THS C305","X2":"PHY (M303/C307) / HMSC C305 / VAD M202 / BA C306 / GEOG T503","X3":"BIO (M403/T304) / M2 C307 / BM C306 / ECON C305 / CHIS C304"}},"S4-4B":{"sheetName":"S4-4B","form":"S4","className":"4B","teachers":"","room":"C306","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["MACO C306","X3","MACO C306","X1","MACO C306","PE PG","X2"],["MACO C306","X3","MACO C306","X1","ENG C306","PE PG","X2"],["X2","MACO C306","ENG C306","X3","CHIN C306","X1","ENG C306"],["X2","MACO C306","CHIN C306","X3","CHIN C306","X1","ENG C306"],["X1","ENG C306","X2","MACO C306","CS C306","X3","CHIN C306"],["X1","ENG C306","X2","CS C306","CS C306","X3","CHIN C306"],["ENG C306","CHIN C306","X1","CHIN C306","X2","ENG C306","X3"],["MOED C306","CHIN C306","X1","CHIN C306","X2","ENG C306","X3"]],"electivesRaw":{"X1":"CHEM (M501/C307) / DAT T002 / ECON C306 / ICT T403 / THS C305","X2":"PHY (M303/C307) / HMSC C305 / VAD M202 / BA C306 / GEOG T503","X3":"BIO (M403/T304) / M2 C307 / BM C306 / ECON C305 / CHIS C304"}},"S4-4C":{"sheetName":"S4-4C","form":"S4","className":"4C","teachers":"","room":"C305","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["PE PG","X3","ENG C305","X1","MACO C305","CHIN C305","X2"],["PE PG","X3","CS C305","X1","MACO C305","CHIN C305","X2"],["X2","CHIN C305","CHIN C305","X3","CHIN C305","X1","CHIN C305"],["X2","CHIN C305","MACO C305","X3","CHIN C305","X1","CHIN C305"],["X1","ENG C305","X2","ENG C305","ENG C305","X3","MACO C305"],["X1","MACO C305","X2","ENG C305","ENG C305","X3","MACO C305"],["ENG C305","CS C305","X1","MACO C305","X2","ENG C305","X3"],["MOED C305","CS C305","X1","MACO C305","X2","ENG C305","X3"]],"electivesRaw":{"X1":"CHEM (M501/C307) / DAT T002 / ECON C306 / ICT T403 / THS C305","X2":"PHY (M303/C307) / HMSC C305 / VAD M202 / BA C306 / GEOG T503","X3":"BIO (M403/T304) / M2 C307 / BM C306 / ECON C305 / CHIS C304"}},"S4-4D":{"sheetName":"S4-4D","form":"S4","className":"4D","teachers":"","room":"C304","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["PE PG","X3","ENG C304","X1","ENG C304","ENG C304","X2"],["PE PG","X3","CS C304","X1","CHIN C304","ENG C304","X2"],["X2","CHIN C304","CHIN C304","X3","CS C304","X1","CHIN C304"],["X2","CHIN C304","CHIN C304","X3","CS C304","X1","CHIN C304"],["X1","MACO C304","X2","CHIN C304","MACO C304","X3","ENG C304"],["X1","MACO C304","X2","CHIN C304","MACO C304","X3","ENG C304"],["MACO C304","ENG C304","X1","ENG C304","X2","MACO C304","X3"],["MOED C304","ENG C304","X1","MACO C304","X2","MACO C304","X3"]],"electivesRaw":{"X1":"CHEM (M501/C307) / DAT T002 / ECON C306 / ICT T403 / THS C305","X2":"PHY (M303/C307) / HMSC C305 / VAD M202 / BA C306 / GEOG T503","X3":"BIO (M403/T304) / M2 C307 / BM C306 / ECON C305 / CHIS C304"}},"S5-5A":{"sheetName":"S5-5A","form":"S5","className":"5A","teachers":"","room":"C303","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["X3","X2","X1","ENG C303","PE PG","MACO C303","MACO C303"],["X3","X2","X1","ENG C303","PE PG","MACO C303","CHIN C303"],["CHIN C303","X3","CHIN C303","X2","X1","CHIN C303","ENG C303"],["CHIN C303","X3","CHIN C303","X2","X1","CHIN C303","CS C303"],["CS C303","ENG C303","MACO C303","X3","MACO C303","X2","X1"],["CS C303","ENG C303","MACO C303","X3","ENG C303","X2","X1"],["ENG C303","X1","ENG C303","MACO C303","CHIN C303","X3","X2"],["MOED C303","X1","ENG C303","MACO C303","CHIN C303","X3","X2"]],"electivesRaw":{"X1":"CHEM (M503/C303) / DAT T002 / ECON C302 / ICT T403 / THS C301 / SS(CHI) [Day 3, 1-2] / SS(ENG) [Day 5, 3-4] ; [Day 7, 6-7] / SS(MATH) [Day 2, 7-8] T303","X2":"PHY (M301/C303) / HMSC C301 / VAD M202 / BA C302 / GEOG T503 / SS(CHI) [Day 2, 1-2] / SS(ENG) [Day 4, 3-4] ; [Day 6, 5-6] / SS(MATH) [Day 7, 7-8] T303","X3":"BIO (M401/T304) / M2 C303 / BM C302 / ECON C301 / CHIS C406 / SS(CHI) [Day 1, 1-2] / SS(ENG) [Day 2, 3-4] ; [Day 4, 5-6] / SS(MATH) [Day 6, 7-8] T303"}},"S5-5B":{"sheetName":"S5-5B","form":"S5","className":"5B","teachers":"","room":"C302","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["X3","X2","X1","MACO C302","PE PG","ENG C302","MACO C302"],["X3","X2","X1","MACO C302","PE PG","MACO C302","MACO C302"],["ENG C302","X3","CHIN C302","X2","X1","CHIN C302","CHIN C302"],["ENG C302","X3","CHIN C302","X2","X1","CHIN C302","CHIN C302"],["CHIN C302","ENG C302","CS C302","X3","ENG C302","X2","X1"],["CHIN C302","CHIN C302","CS C302","X3","ENG C302","X2","X1"],["CS C302","X1","ENG C302","ENG C302","MACO C302","X3","X2"],["MOED C302","X1","MACO C302","ENG C302","MACO C302","X3","X2"]],"electivesRaw":{"X1":"CHEM (M503/C303) / DAT T002 / ECON C302 / ICT T403 / THS C301 / SS(CHI) [Day 3, 1-2] / SS(ENG) [Day 5, 3-4] ; [Day 7, 6-7] / SS(MATH) [Day 2, 7-8] T303","X2":"PHY (M301/C303) / HMSC C301 / VAD M202 / BA C302 / GEOG T503 / SS(CHI) [Day 2, 1-2] / SS(ENG) [Day 4, 3-4] ; [Day 6, 5-6] / SS(MATH) [Day 7, 7-8] T303","X3":"BIO (M401/T304) / M2 C303 / BM C302 / ECON C301 / CHIS C406 / SS(CHI) [Day 1, 1-2] / SS(ENG) [Day 2, 3-4] ; [Day 4, 5-6] / SS(MATH) [Day 6, 7-8] T303"}},"S5-5C":{"sheetName":"S5-5C","form":"S5","className":"5C","teachers":"","room":"C301","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["X3","X2","X1","ENG C301","ENG C301","CHIN C301","CS C301"],["X3","X2","X1","ENG C301","ENG C301","CHIN C301","MACO C301"],["MACO C301","X3","CHIN C301","X2","X1","ENG C301","CHIN C301"],["MACO C301","X3","CHIN C301","X2","X1","MACO C301","ENG C301"],["CHIN C301","ENG C301","CS C301","X3","MACO C301","X2","X1"],["CHIN C301","ENG C301","CS C301","X3","MACO C301","X2","X1"],["ENG C301","X1","MACO C301","PE PG","CHIN C301","X3","X2"],["MOED C301","X1","MACO C301","PE PG","CHIN C301","X3","X2"]],"electivesRaw":{"X1":"CHEM (M503/C303) / DAT T002 / ECON C302 / ICT T403 / THS C301 / SS(CHI) [Day 3, 1-2] / SS(ENG) [Day 5, 3-4] ; [Day 7, 6-7] / SS(MATH) [Day 2, 7-8] T303","X2":"PHY (M301/C303) / HMSC C301 / VAD M202 / BA C302 / GEOG T503 / SS(CHI) [Day 2, 1-2] / SS(ENG) [Day 4, 3-4] ; [Day 6, 5-6] / SS(MATH) [Day 7, 7-8] T303","X3":"BIO (M401/T304) / M2 C303 / BM C302 / ECON C301 / CHIS C406 / SS(CHI) [Day 1, 1-2] / SS(ENG) [Day 2, 3-4] ; [Day 4, 5-6] / SS(MATH) [Day 6, 7-8] T303"}},"S5-5D":{"sheetName":"S5-5D","form":"S5","className":"5D","teachers":"","room":"C406","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["X3","X2","X1","ENG C406","CHIN C406","CHIN C406","ENG C406"],["X3","X2","X1","ENG C406","CHIN C406","CHIN C406","CS C406"],["MACO C406","X3","CHIN C406","X2","X1","ENG C406","MACO C406"],["MACO C406","X3","CHIN C406","X2","X1","MACO C406","CHIN C406"],["CHIN C406","ENG C406","MACO C406","X3","ENG C406","X2","X1"],["CHIN C406","ENG C406","MACO C406","X3","ENG C406","X2","X1"],["ENG C406","X1","CS C406","PE PG","MACO C406","X3","X2"],["MOED C406","X1","CS C406","PE PG","MACO C406","X3","X2"]],"electivesRaw":{"X1":"CHEM (M503/C303) / DAT T002 / ECON C302 / ICT T403 / THS C301 / SS(CHI) [Day 3, 1-2] / SS(ENG) [Day 5, 3-4] ; [Day 7, 6-7] / SS(MATH) [Day 2, 7-8] T303","X2":"PHY (M301/C303) / HMSC C301 / VAD M202 / BA C302 / GEOG T503 / SS(CHI) [Day 2, 1-2] / SS(ENG) [Day 4, 3-4] ; [Day 6, 5-6] / SS(MATH) [Day 7, 7-8] T303","X3":"BIO (M401/T304) / M2 C303 / BM C302 / ECON C301 / CHIS C406 / SS(CHI) [Day 1, 1-2] / SS(ENG) [Day 2, 3-4] ; [Day 4, 5-6] / SS(MATH) [Day 6, 7-8] T303"}},"S6-6A":{"sheetName":"S6-6A","form":"S6","className":"6A","teachers":"","room":"C405","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["ENG C405","MACO C405","ENG C405","MACO C405","X2","X1","X3"],["ENG C405","MACO C405","MACO C405","MACO C405","X2","X1","X3"],["X3","ENG C405","CHIN C405","CS C405","CHIN C405","X2","X1"],["X3","ENG C405","CHIN C405","CS C405","CHIN C405","X2","X1"],["X2","X1","X3","CHIN C405","ENG C405","ENG C405","ENG C405"],["X2","X1","X3","CHIN C405","ENG C405","CHIN C405","CS C405"],["MACO C405","PE PG","X2","X1","X3","MACO C405","CHIN C405"],["MOED C405","PE PG","X2","X1","X3","MACO C405","CHIN C405"]],"electivesRaw":{"X1":"CHEM (M503/C405) / DAT T002 / ECON C404 / ICT T403 / THS C403 / SS(CHI) [Day 2, 5-6] / SS(ENG) [Day 4, 7-8] ; [Day 6, 1-2] / SS(MATH) [Day 7, 3-4] T304","X2":"PHY (M303/C405) / HMSC C404 / VAD M202 / BA C403 / GEOG T503 / SS(CHI) [Day 1, 5-6] / SS(ENG) [Day 5, 1-2] ; [Day 6, 3-4] / SS(MATH) [Day 3, 7-8] T304","X3":"BIO (M403/T303) / M2 C405 / BM C404 / ECON C403 / CHIS C402 / SS(CHI) [Day 1, 3-4] / SS(ENG) [Day 3, 5-6] ; [Day 7, 1-2] / SS(MATH) [Day 5, 7-8] T304"}},"S6-6B":{"sheetName":"S6-6B","form":"S6","className":"6B","teachers":"","room":"C404","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["CHIN C404","ENG C404","CS C404","ENG C404","X2","X1","X3"],["CHIN C404","ENG C404","CHIN C404","ENG C404","X2","X1","X3"],["X3","CS C404","MACO C404","MACO C404","MACO C404","X2","X1"],["X3","CS C404","ENG C404","MACO C404","MACO C404","X2","X1"],["X2","X1","X3","CHIN C404","CHIN C404","MACO C404","ENG C404"],["X2","X1","X3","CHIN C404","CHIN C404","MACO C404","MACO C404"],["ENG C404","PE PG","X2","X1","X3","ENG C404","CHIN C404"],["MOED C404","PE PG","X2","X1","X3","ENG C404","CHIN C404"]],"electivesRaw":{"X1":"CHEM (M503/C405) / DAT T002 / ECON C404 / ICT T403 / THS C403 / SS(CHI) [Day 2, 5-6] / SS(ENG) [Day 4, 7-8] ; [Day 6, 1-2] / SS(MATH) [Day 7, 3-4] T304","X2":"PHY (M303/C405) / HMSC C404 / VAD M202 / BA C403 / GEOG T503 / SS(CHI) [Day 1, 5-6] / SS(ENG) [Day 5, 1-2] ; [Day 6, 3-4] / SS(MATH) [Day 3, 7-8] T304","X3":"BIO (M403/T303) / M2 C405 / BM C404 / ECON C403 / CHIS C402 / SS(CHI) [Day 1, 3-4] / SS(ENG) [Day 3, 5-6] ; [Day 7, 1-2] / SS(MATH) [Day 5, 7-8] T304"}},"S6-6C":{"sheetName":"S6-6C","form":"S6","className":"6C","teachers":"","room":"C403","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["MACO C403","CHIN C403","PE PG","CS C403","X2","X1","X3"],["MACO C403","CHIN C403","PE PG","CS C403","X2","X1","X3"],["X3","MACO C403","ENG C403","ENG C403","CHIN C403","X2","X1"],["X3","MACO C403","ENG C403","ENG C403","CHIN C403","X2","X1"],["X2","X1","X3","CHIN C403","ENG C403","MACO C403","ENG C403"],["X2","X1","X3","CHIN C403","MACO C403","MACO C403","MACO C403"],["ENG C403","ENG C403","X2","X1","X3","CHIN C403","CS C403"],["MOED C403","ENG C403","X2","X1","X3","CHIN C403","CHIN C403"]],"electivesRaw":{"X1":"CHEM (M503/C405) / DAT T002 / ECON C404 / ICT T403 / THS C403 / SS(CHI) [Day 2, 5-6] / SS(ENG) [Day 4, 7-8] ; [Day 6, 1-2] / SS(MATH) [Day 7, 3-4] T304","X2":"PHY (M303/C405) / HMSC C404 / VAD M202 / BA C403 / GEOG T503 / SS(CHI) [Day 1, 5-6] / SS(ENG) [Day 5, 1-2] ; [Day 6, 3-4] / SS(MATH) [Day 3, 7-8] T304","X3":"BIO (M403/T303) / M2 C405 / BM C404 / ECON C403 / CHIS C402 / SS(CHI) [Day 1, 3-4] / SS(ENG) [Day 3, 5-6] ; [Day 7, 1-2] / SS(MATH) [Day 5, 7-8] T304"}},"S6-6D":{"sheetName":"S6-6D","form":"S6","className":"6D","teachers":"","room":"C402","periods":[{"num":1,"start":"08:30","end":"09:10"},{"num":2,"start":"09:10","end":"09:50"},{"num":3,"start":"10:05","end":"10:45"},{"num":4,"start":"10:45","end":"11:25"},{"num":5,"start":"11:40","end":"12:20"},{"num":6,"start":"12:20","end":"13:00"},{"num":7,"start":"14:20","end":"15:00"},{"num":8,"start":"15:00","end":"15:40"}],"grid":[["ENG C402","ENG C402","PE PG","CHIN C402","X2","X1","X3"],["ENG C402","ENG C402","PE PG","CHIN C402","X2","X1","X3"],["X3","CHIN C402","MACO C402","MACO C402","ENG C402","X2","X1"],["X3","CHIN C402","MACO C402","MACO C402","MACO C402","X2","X1"],["X2","X1","X3","ENG C402","CHIN C402","CS C402","CS C402"],["X2","X1","X3","ENG C402","CHIN C402","CS C402","ENG C402"],["MACO C402","MACO C402","X2","X1","X3","CHIN C402","CHIN C402"],["MOED C402","MACO C402","X2","X1","X3","ENG C402","CHIN C402"]],"electivesRaw":{"X1":"CHEM (M503/C405) / DAT T002 / ECON C404 / ICT T403 / THS C403 / SS(CHI) [Day 2, 5-6] / SS(ENG) [Day 4, 7-8] ; [Day 6, 1-2] / SS(MATH) [Day 7, 3-4] T304","X2":"PHY (M303/C405) / HMSC C404 / VAD M202 / BA C403 / GEOG T503 / SS(CHI) [Day 1, 5-6] / SS(ENG) [Day 5, 1-2] ; [Day 6, 3-4] / SS(MATH) [Day 3, 7-8] T304","X3":"BIO (M403/T303) / M2 C405 / BM C404 / ECON C403 / CHIS C402 / SS(CHI) [Day 1, 3-4] / SS(ENG) [Day 3, 5-6] ; [Day 7, 1-2] / SS(MATH) [Day 5, 7-8] T304"}}},"dateOverrides":{},"selectedForm":"S6","selectedClass":"S6-6A","startDate":"2026-11-24","endDate":"2027-01-18","theme":{"paletteId":"paper-ink","bg":"#F7F6F2","surface":"#FFFFFF","text":"#18181B","muted":"#78756F","accent":"#18181B","groupColorMode":"tinted","groupQuartetId":"academy","groupColors":{"CORE":"#2B50AA","X1":"#1F7A5C","X2":"#C25934","X3":"#7B4B94"},"fontId":"modern-sans","fontBody":"'Inter', 'Noto Sans TC', sans-serif","fontDisplay":"'Inter', 'Noto Sans TC', sans-serif","fontNum":"'Plus Jakarta Sans', 'Inter', sans-serif","customGoogleFont":"","sizePresetId":"standard","basePx":16,"titlePx":36,"heroPx":160,"density":"minimal","spacePct":115}};
+/*__APP_CONFIG_END__*/
+
+const DEFAULT_THEME = {
+  paletteId: 'paper-ink',
+  bg: '#F7F6F2',
+  surface: '#FFFFFF',
+  text: '#18181B',
+  muted: '#78756F',
+  accent: '#18181B',
+  groupColorMode: 'tinted', // 'tinted' | 'accent' | 'off'
+  groupQuartetId: 'academy',
+  groupColors: { CORE: '#2B50AA', X1: '#1F7A5C', X2: '#C25934', X3: '#7B4B94' },
+  fontId: 'modern-sans',
+  fontBody: FONT_PRESETS[0].body,
+  fontDisplay: FONT_PRESETS[0].display,
+  fontNum: FONT_PRESETS[0].num,
+  customGoogleFont: '',
+  sizePresetId: 'standard',
+  basePx: 16,
+  titlePx: 36,
+  heroPx: 160,
+  density: 'minimal',
+  spacePct: 115
+};
+
+const LS_PREF_KEY = 'lesson_countdown_prefs_v1';
+
+let state = {
+  mode: APP_CONFIG.mode || 'MASTER', // 'MASTER' | 'LOCKED' | 'SINGLE'
+  desensitized: Boolean(APP_CONFIG.desensitized),
+  calendar: APP_CONFIG.calendar,
+  classesRaw: APP_CONFIG.classesRaw || {},
+  classesCompiled: {},
+  dateOverrides: APP_CONFIG.dateOverrides || {},
+  selectedForm: APP_CONFIG.selectedForm || 'S6',
+  selectedClass: APP_CONFIG.selectedClass || 'S6-6A',
+  startDate: APP_CONFIG.startDate || '',
+  endDate: APP_CONFIG.endDate || '',
+  groupFilter: 'ALL',
+  myElectivesByForm: {}, // e.g. { S6: { X1: 'ECON_X1', X2: 'BA_X2', X3: 'BM_X3' } }
+  shareTargetMode: 'CLASS',
+  activeSingleId: APP_CONFIG.singleSubject ? APP_CONFIG.singleSubject.id : null,
+  singleAccentOverride: false,
+  theme: Object.assign({}, DEFAULT_THEME, APP_CONFIG.theme || {}, {
+    groupColors: Object.assign({}, DEFAULT_THEME.groupColors, (APP_CONFIG.theme && APP_CONFIG.theme.groupColors) || {})
+  }),
+  computed: null
+};
+
+function escapeHtml(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function formatShortDate(isoStr) {
+  if (!isoStr || isoStr.length < 10) return isoStr || '';
+  return `${parseInt(isoStr.slice(5, 7), 10)}月${parseInt(isoStr.slice(8, 10), 10)}日`;
+}
+
+// ============================================================================
+// 2. 外觀、字體大小與留白間距引擎
+// ============================================================================
+function hexToLum(hex) {
+  const c = String(hex || '').replace('#', '');
+  if (c.length !== 6) return 1;
+  const r = parseInt(c.slice(0,2),16)/255, g = parseInt(c.slice(2,4),16)/255, b = parseInt(c.slice(4,6),16)/255;
+  return 0.2126*r + 0.7152*g + 0.0722*b;
+}
+
+function mixHex(h1, h2, w) {
+  const c1 = String(h1 || '').replace('#',''), c2 = String(h2 || '').replace('#','');
+  if (c1.length !== 6 || c2.length !== 6) return h1;
+  const r = Math.round(parseInt(c1.slice(0,2),16)*(1-w) + parseInt(c2.slice(0,2),16)*w);
+  const g = Math.round(parseInt(c1.slice(2,4),16)*(1-w) + parseInt(c2.slice(2,4),16)*w);
+  const b = Math.round(parseInt(c1.slice(4,6),16)*(1-w) + parseInt(c2.slice(4,6),16)*w);
+  return '#' + [r,g,b].map(x => x.toString(16).padStart(2,'0')).join('');
+}
+
+function applyTheme() {
+  const t = state.theme;
+  const root = document.documentElement;
+  const darkBg = hexToLum(t.bg) < 0.35;
+  const darkAcc = hexToLum(t.accent) < 0.45;
+
+  root.style.setProperty('--bg', t.bg);
+  root.style.setProperty('--surface', t.surface);
+  root.style.setProperty('--surface-alt', mixHex(t.bg, t.text, darkBg ? 0.08 : 0.045));
+  root.style.setProperty('--text', t.text);
+  root.style.setProperty('--muted', t.muted || mixHex(t.text, t.bg, 0.48));
+  root.style.setProperty('--accent', t.accent);
+  root.style.setProperty('--accent-fg', darkAcc ? '#FFFFFF' : '#111111');
+  root.style.setProperty('--border', darkBg ? 'rgba(255,255,255,0.10)' : 'rgba(24,24,27,0.08)');
+
+  root.style.setProperty('--font-body', t.fontBody);
+  root.style.setProperty('--font-display', t.fontDisplay);
+  root.style.setProperty('--font-num', t.fontNum);
+
+  const base = Math.max(12, Math.min(28, Number(t.basePx) || 16));
+  const title = Math.max(18, Math.min(84, Number(t.titlePx) || 36));
+  const hero = Math.max(64, Math.min(320, Number(t.heroPx) || 160));
+  const spaceScale = Math.max(0.75, Math.min(1.6, (Number(t.spacePct) || 115) / 100));
+
+  root.style.setProperty('--fs-base', `${base}px`);
+  root.style.setProperty('--fs-sm', `${Math.round(base * 0.82 * 10) / 10}px`);
+  root.style.setProperty('--fs-xs', `${Math.round(base * 0.73 * 10) / 10}px`);
+  root.style.setProperty('--fs-card-title', `${Math.round(base * 1.15 * 10) / 10}px`);
+  root.style.setProperty('--fs-card-num', `${Math.round(base * 2.75)}px`);
+  root.style.setProperty('--fs-title', `${title}px`);
+  root.style.setProperty('--fs-hero', `${hero}px`);
+  root.style.setProperty('--space-scale', String(spaceScale));
+
+  if (t.customGoogleFont) ensureGoogleFont(t.customGoogleFont);
+
+  syncStudioInputs();
+  refreshDensityViews();
+}
+
+function ensureGoogleFont(name) {
+  const clean = name.trim();
+  if (!clean) return;
+  // Skip local-only CJK system font names from Google Font fetch errors
+  if (/^(PingFang|Hiragino|Microsoft|Kaiti|Songti|PMingLiU|Heiti)/i.test(clean)) return;
+  const id = 'gf-dyn-' + clean.replace(/\s+/g, '-').toLowerCase();
+  if (document.getElementById(id)) return;
+  const link = document.createElement('link');
+  link.id = id;
+  link.rel = 'stylesheet';
+  link.href = 'https://fonts.googleapis.com/css2?family=' + encodeURIComponent(clean) + ':wght@400;600;700&display=swap';
+  link.setAttribute('data-dynamic-gf', '1');
+  document.head.appendChild(link);
+}
+
+function syncStudioInputs() {
+  const t = state.theme;
+  const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+  setVal('numBasePx', t.basePx);
+  setVal('rngBasePx', t.basePx);
+  setVal('numTitlePx', t.titlePx);
+  setVal('rngTitlePx', t.titlePx);
+  setVal('numHeroPx', t.heroPx);
+  setVal('rngHeroPx', t.heroPx);
+  setVal('numSpacePct', t.spacePct);
+  setVal('rngSpacePct', t.spacePct);
+  setVal('pickBg', t.bg);
+  setVal('pickSurface', t.surface);
+  setVal('pickText', t.text);
+  setVal('pickAccent', t.accent);
+  if (t.groupColors) {
+    setVal('pickGrpCORE', t.groupColors.CORE || '#2B50AA');
+    setVal('pickGrpX1', t.groupColors.X1 || '#1F7A5C');
+    setVal('pickGrpX2', t.groupColors.X2 || '#C25934');
+    setVal('pickGrpX3', t.groupColors.X3 || '#7B4B94');
+  }
+
+  const gmGrid = document.getElementById('groupModeGrid');
+  if (gmGrid) {
+    gmGrid.innerHTML = GROUP_COLOR_MODES.map(m => `
+      <button class="studio-chip ${t.groupColorMode === m.id ? 'active' : ''}" onclick="selectGroupColorMode('${m.id}')">${m.name}</button>
+    `).join('');
+  }
+  const gcCtrl = document.getElementById('groupCustomControls');
+  if (gcCtrl) {
+    gcCtrl.classList.toggle('hidden', t.groupColorMode === 'off');
+  }
+  const gqGrid = document.getElementById('groupQuartetGrid');
+  if (gqGrid) {
+    gqGrid.innerHTML = GROUP_QUARTETS.map(q => `
+      <button class="pal-btn ${t.groupQuartetId === q.id ? 'active' : ''}" onclick="selectGroupQuartet('${q.id}')">
+        <span class="pal-dots">
+          <span class="pal-dot" style="background:${q.colors.CORE}"></span>
+          <span class="pal-dot" style="background:${q.colors.X1}"></span>
+          <span class="pal-dot" style="background:${q.colors.X2}"></span>
+          <span class="pal-dot" style="background:${q.colors.X3}"></span>
+        </span>
+        <span>${q.name}</span>
+      </button>
+    `).join('');
+  }
+
+  const spGrid = document.getElementById('sizePresetsGrid');
+  if (spGrid) {
+    spGrid.innerHTML = SIZE_PRESETS.map(p => `
+      <button class="studio-chip ${t.sizePresetId === p.id ? 'active' : ''}" onclick="selectSizePreset('${p.id}')">${p.name}</button>
+    `).join('');
+  }
+
+  const dnGrid = document.getElementById('densityPresetsGrid');
+  if (dnGrid) {
+    dnGrid.innerHTML = DENSITY_PRESETS.map(d => `
+      <button class="studio-chip ${t.density === d.id ? 'active' : ''}" onclick="selectDensity('${d.id}')">${d.name}</button>
+    `).join('');
+  }
+
+  const palGrid = document.getElementById('paletteGrid');
+  if (palGrid) {
+    palGrid.innerHTML = PALETTE_PRESETS.map(p => `
+      <button class="pal-btn ${t.paletteId === p.id ? 'active' : ''}" onclick="selectPalette('${p.id}')">
+        <span class="pal-dots">
+          <span class="pal-dot" style="background:${p.bg}"></span>
+          <span class="pal-dot" style="background:${p.accent}"></span>
+        </span>
+        <span>${p.name}</span>
+      </button>
+    `).join('');
+  }
+
+  const fsList = document.getElementById('fontStackList');
+  if (fsList) {
+    fsList.innerHTML = FONT_PRESETS.map(f => `
+      <button class="font-item-btn ${t.fontId === f.id ? 'active' : ''}" onclick="selectFont('${f.id}')" style="font-family:${f.display}">
+        <span style="font-size:13px; font-weight:600;">${f.name}</span>
+        <span style="font-size:11px; color:#71717A;">${f.sample}</span>
+      </button>
+    `).join('');
+  }
+}
+
+function selectSizePreset(id) {
+  const p = SIZE_PRESETS.find(x => x.id === id);
+  if (!p) return;
+  state.theme.sizePresetId = p.id;
+  state.theme.basePx = p.basePx;
+  state.theme.titlePx = p.titlePx;
+  state.theme.heroPx = p.heroPx;
+  applyTheme();
+}
+
+function onCustomSizeInput(kind, rawVal) {
+  const v = Number(rawVal);
+  if (!v || isNaN(v)) return;
+  state.theme.sizePresetId = 'custom';
+  if (kind === 'base') state.theme.basePx = v;
+  if (kind === 'title') state.theme.titlePx = v;
+  if (kind === 'hero') state.theme.heroPx = v;
+  applyTheme();
+}
+
+function selectDensity(id) {
+  state.theme.density = id;
+  applyTheme();
+}
+
+function onSpaceScaleInput(rawVal) {
+  const v = Number(rawVal);
+  if (!v || isNaN(v)) return;
+  state.theme.spacePct = v;
+  applyTheme();
+}
+
+function getGroupColor(grpKey) {
+  const gc = state.theme.groupColors || DEFAULT_THEME.groupColors;
+  return gc[grpKey] || gc.CORE || state.theme.accent;
+}
+
+function selectGroupColorMode(modeId) {
+  state.theme.groupColorMode = modeId;
+  state.singleAccentOverride = false;
+  applyTheme();
+}
+
+function selectGroupQuartet(qId) {
+  const q = GROUP_QUARTETS.find(x => x.id === qId);
+  if (!q) return;
+  state.theme.groupQuartetId = q.id;
+  state.theme.groupColors = Object.assign({}, q.colors);
+  state.singleAccentOverride = false;
+  applyTheme();
+}
+
+function onCustomGroupColor() {
+  state.theme.groupQuartetId = 'custom';
+  state.theme.groupColors = {
+    CORE: document.getElementById('pickGrpCORE').value,
+    X1: document.getElementById('pickGrpX1').value,
+    X2: document.getElementById('pickGrpX2').value,
+    X3: document.getElementById('pickGrpX3').value
+  };
+  state.singleAccentOverride = false;
+  applyTheme();
+}
+
+function selectPalette(id) {
+  const p = PALETTE_PRESETS.find(x => x.id === id);
+  if (!p) return;
+  const goingDark = hexToLum(p.bg) < 0.35;
+  Object.assign(state.theme, { paletteId: p.id, bg: p.bg, surface: p.surface, text: p.text, muted: p.muted, accent: p.accent });
+  // Auto-adapt group quartet between dark/light if user hasn't set custom group colors
+  if (goingDark && state.theme.groupQuartetId !== 'custom' && state.theme.groupQuartetId !== 'luminous') {
+    state.theme.groupQuartetId = 'luminous';
+    state.theme.groupColors = Object.assign({}, GROUP_QUARTETS.find(q => q.id === 'luminous').colors);
+  } else if (!goingDark && state.theme.groupQuartetId === 'luminous') {
+    state.theme.groupQuartetId = 'academy';
+    state.theme.groupColors = Object.assign({}, GROUP_QUARTETS.find(q => q.id === 'academy').colors);
+  }
+  if (state.activeSingleId && state.mode !== 'SINGLE') {
+    state.singleAccentOverride = true;
+  }
+  applyTheme();
+}
+
+function onCustomColor() {
+  const prevAccent = state.theme.accent;
+  state.theme.paletteId = 'custom';
+  state.theme.bg = document.getElementById('pickBg').value;
+  state.theme.surface = document.getElementById('pickSurface').value;
+  state.theme.text = document.getElementById('pickText').value;
+  state.theme.accent = document.getElementById('pickAccent').value;
+  state.theme.muted = mixHex(state.theme.text, state.theme.bg, 0.48);
+  if (state.activeSingleId && state.theme.accent !== prevAccent) {
+    state.singleAccentOverride = true;
+  }
+  applyTheme();
+}
+
+function selectFont(id) {
+  const f = FONT_PRESETS.find(x => x.id === id);
+  if (!f) return;
+  Object.assign(state.theme, { fontId: f.id, fontBody: f.body, fontDisplay: f.display, fontNum: f.num, customGoogleFont: '' });
+  const qs = document.getElementById('systemFontQuickSelect');
+  if (qs) qs.value = '';
+  applyTheme();
+}
+
+function applyFontByName(name) {
+  const clean = String(name || '').trim();
+  if (!clean) return;
+  const stack = `'${clean}', 'Noto Sans TC', sans-serif`;
+  Object.assign(state.theme, { fontId: 'custom', customGoogleFont: clean, fontBody: stack, fontDisplay: stack, fontNum: stack });
+  const inp = document.getElementById('customFontName');
+  if (inp) inp.value = clean;
+  applyTheme();
+}
+
+function applyCustomFont() {
+  const name = document.getElementById('customFontName').value.trim();
+  if (name) applyFontByName(name);
+}
+
+function openStudio() {
+  syncStudioInputs();
+  document.getElementById('studioMask').classList.add('open');
+}
+function closeStudio() {
+  document.getElementById('studioMask').classList.remove('open');
+}
+
+function renderGroupTabDots() {
+  const tabs = document.getElementById('groupTabs');
+  if (!tabs) return;
+  const showColor = state.theme.groupColorMode !== 'off';
+  const labels = { ALL: '全部', MINE: '我的科目', CORE: '核心', X1: 'X1', X2: 'X2', X3: 'X3' };
+  tabs.querySelectorAll('.seg-btn').forEach(btn => {
+    const g = btn.getAttribute('data-grp');
+    if (g === 'ALL' || g === 'MINE' || !showColor) {
+      btn.innerHTML = labels[g] || g;
+    } else {
+      const c = getGroupColor(g);
+      btn.innerHTML = `<span class="tab-dot" style="background:${c}"></span>${labels[g] || g}`;
+    }
+  });
+}
+
+function refreshDensityViews() {
+  renderGroupTabDots();
+  if (state.mode === 'SINGLE') {
+    document.getElementById('studioGroupColorSection')?.classList.add('hidden');
+    renderStandaloneSingle();
+  } else if (state.computed) {
+    renderSubjectCards();
+    renderClassTimetable();
+    if (state.activeSingleId) renderSinglePreview(state.activeSingleId);
+  }
+}
+
+// ============================================================================
+// 3. 課堂資料編譯與計算引擎
+// ============================================================================
+function compileClassObj(clsObj) {
+  const map = {};
+  function addSlot(id, code, group, teacher, room, day, period) {
+    if (!map[id]) {
+      map[id] = { id, code, name: SUBJECT_DICT[code] || code, group, teachers: new Set(), rooms: new Set(), slots: [] };
+    }
+    if (teacher) map[id].teachers.add(teacher);
+    if (room) map[id].rooms.add(room);
+    if (!map[id].slots.some(s => s.day === day && s.period === period)) {
+      map[id].slots.push({ day, period, teacher, room });
+    }
+  }
+
+  const blkSlots = { X1: [], X2: [], X3: [] };
+  function splitCodeTeacherRoom(tokens) {
+    const code = tokens[0] || '';
+    if (tokens.length <= 1) return { code, teacher: '', room: '' };
+    if (tokens.length === 2) {
+      // In desensitized mode, 2nd token is a room (e.g. C405, T403, M501, PG, (M503/C405))
+      const t1 = tokens[1];
+      const looksLikeRoom = /^(\(.*\)|[CMT]\d{3}|PG|HALL|LAB.*)$/i.test(t1);
+      return looksLikeRoom ? { code, teacher: '', room: t1 } : { code, teacher: t1, room: '' };
+    }
+    return { code, teacher: tokens[1], room: tokens.slice(2).join(' ') };
+  }
+
+  clsObj.grid.forEach((row, pIdx) => {
+    const pNum = clsObj.periods[pIdx]?.num || (pIdx + 1);
+    row.forEach((cellRaw, dIdx) => {
+      const dNum = dIdx + 1;
+      const txt = String(cellRaw || '').trim();
+      if (!txt) return;
+      if (/^X[123]$/i.test(txt)) {
+        blkSlots[txt.toUpperCase()].push({ day: dNum, period: pNum });
+        return;
+      }
+      for (const line of txt.split(/\r?\n/).map(s => s.trim()).filter(Boolean)) {
+        const parsed = splitCodeTeacherRoom(line.split(/\s+/));
+        addSlot(parsed.code, parsed.code, 'CORE', parsed.teacher, parsed.room, dNum, pNum);
+      }
+    });
+  });
+
+  for (const blk of ['X1', 'X2', 'X3']) {
+    const rawLine = String(clsObj.electivesRaw?.[blk] || '').replace(/\u00a0/g, ' ').trim();
+    if (!rawLine) continue;
+    const segs = [];
+    let buf = '', depth = 0;
+    for (const ch of rawLine) {
+      if (ch === '(' || ch === '[') depth++;
+      else if (ch === ')' || ch === ']') depth = Math.max(0, depth - 1);
+      if (ch === '/' && depth === 0) {
+        if (buf.trim()) segs.push(buf.trim());
+        buf = '';
+      } else buf += ch;
+    }
+    if (buf.trim()) segs.push(buf.trim());
+
+    for (const seg of segs) {
+      if (/^SS\(/i.test(seg)) {
+        const cm = seg.match(/^(SS\([A-Z]+\))/i);
+        if (!cm) continue;
+        const ssCode = cm[1].toUpperCase();
+        const rest = seg.slice(cm[0].length).trim();
+        const rm = rest.match(/([A-Z]\d{3})\s*$/i);
+        const defRoom = rm ? rm[1] : '';
+        for (const sp of rest.split(';')) {
+          const sTrim = sp.trim();
+          const tm = sTrim.startsWith('[') ? null : sTrim.match(/^([A-Z0-9,]+)/i);
+          const teacher = tm ? tm[1] : '';
+          const br = /\[Day\s*(\d+)\s*,\s*(\d+)(?:\s*-\s*(\d+))?\]/gi;
+          let m;
+          while ((m = br.exec(sp)) !== null) {
+            const d = parseInt(m[1], 10), p1 = parseInt(m[2], 10), p2 = m[3] ? parseInt(m[3], 10) : p1;
+            for (let p = p1; p <= p2; p++) addSlot(`${ssCode}_${blk}`, ssCode, blk, teacher, defRoom, d, p);
+          }
+        }
+      } else {
+        const parsed = splitCodeTeacherRoom(seg.split(/\s+/));
+        if (!parsed.code) continue;
+        for (const sl of blkSlots[blk]) {
+          addSlot(`${parsed.code}_${blk}`, parsed.code, blk, parsed.teacher, parsed.room, sl.day, sl.period);
+        }
+      }
+    }
+  }
+
+  const subjects = Object.values(map).map(s => {
+    s.slots.sort((a, b) => a.day - b.day || a.period - b.period);
+    return {
+      id: s.id, code: s.code, name: s.name, group: s.group,
+      teachers: Array.from(s.teachers).join(', '),
+      rooms: Array.from(s.rooms).join(', '),
+      slots: s.slots
+    };
+  });
+
+  return { ...clsObj, subjects };
+}
+
+function compileAll() {
+  state.classesCompiled = {};
+  for (const [k, v] of Object.entries(state.classesRaw)) {
+    state.classesCompiled[k] = compileClassObj(v);
+  }
+}
+
+function getTodayISO() {
+  const n = new Date();
+  return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`;
+}
+
+function isDefaultTeaching(dObj, form) {
+  if (!dObj.cycleDay) return false;
+  return form === 'S6' ? !dObj.markers.includes('M') : (!dObj.markers.includes('E') && !dObj.markers.includes('T'));
+}
+
+function isEffectiveTeaching(dObj, form) {
+  const k = `${form}:${dObj.date}`;
+  if (Object.prototype.hasOwnProperty.call(state.dateOverrides, k)) return state.dateOverrides[k];
+  return isDefaultTeaching(dObj, form);
+}
+
+function hasEndedToday(endStr) {
+  if (!endStr) return false;
+  const [h, m] = endStr.split(':').map(Number);
+  const n = new Date();
+  return (n.getHours() * 60 + n.getMinutes()) >= (h * 60 + m);
+}
+
+function computeStat(subj, periodsMeta, allYearDays, startDate, deductToday, todayISO) {
+  const pMap = {};
+  periodsMeta.forEach(p => { pMap[p.num] = p; });
+  let totalYearPeriods = 0, remainingPeriods = 0;
+  const upcomingLessons = [];
+
+  for (const dObj of allYearDays) {
+    const daySlots = subj.slots.filter(s => s.day === dObj.cycleDay);
+    if (!daySlots.length) continue;
+    totalYearPeriods += daySlots.length;
+
+    if (dObj.date >= startDate) {
+      const active = daySlots.filter(s => {
+        if (deductToday && dObj.date === todayISO) {
+          const p = pMap[s.period];
+          if (p && hasEndedToday(p.end)) return false;
+        }
+        return true;
+      });
+      if (active.length) {
+        remainingPeriods += active.length;
+        let cur = null;
+        for (const sl of active) {
+          const p = pMap[sl.period] || { start: '', end: '' };
+          if (cur && sl.period === cur.endPeriod + 1) {
+            cur.endPeriod = sl.period;
+            cur.endTime = p.end;
+            cur.periodCount++;
+          } else {
+            if (cur) upcomingLessons.push(cur);
+            cur = {
+              date: dObj.date, weekday: dObj.weekday, cycleDay: dObj.cycleDay,
+              startPeriod: sl.period, endPeriod: sl.period,
+              startTime: p.start, endTime: p.end, periodCount: 1,
+              room: sl.room || subj.rooms
+            };
+          }
+        }
+        if (cur) upcomingLessons.push(cur);
+      }
+    }
+  }
+
+  const completed = Math.max(0, totalYearPeriods - remainingPeriods);
+  const progressPct = totalYearPeriods > 0 ? Math.round((completed / totalYearPeriods) * 100) : 100;
+
+  return {
+    ...subj,
+    totalYearPeriods,
+    completedPeriods: completed,
+    remainingPeriods,
+    remainingSessions: upcomingLessons.length,
+    remainingHours: ((remainingPeriods * 40) / 60).toFixed(1),
+    progressPct,
+    upcomingLessons
+  };
+}
+
+// ============================================================================
+// 4. 初始化與視圖分流 (MASTER / LOCKED / SINGLE)
+// ============================================================================
+function initApp() {
+  // Capture pristine DOM node tree BEFORE any state/theme mutations touch the DOM!
+  PRISTINE_DOC_CLONE = document.documentElement.cloneNode(true);
+
+  applyTheme();
+
+  if (state.mode === 'SINGLE') {
+    const pRoot = document.getElementById('portalRoot');
+    if (pRoot) pRoot.classList.add('hidden');
+    document.getElementById('singleRoot').classList.remove('hidden');
+    const bBtn = document.getElementById('backBtn');
+    if (bBtn) bBtn.classList.add('hidden');
+    const exBtn = document.getElementById('exportSingleBtn');
+    if (exBtn) exBtn.classList.add('hidden');
+    renderStandaloneSingle();
+    return;
+  }
+
+  compileAll();
+
+  if (state.mode === 'LOCKED') {
+    document.getElementById('adminTabBtn')?.remove();
+    document.getElementById('panelAdmin')?.remove();
+    document.getElementById('portalTabs')?.classList.add('hidden');
+    if (!state.desensitized) {
+      document.getElementById('readonlyBadge')?.classList.remove('hidden');
+    }
+  }
+
+  // Load saved student preferences (class & personal electives) from localStorage
+  loadUserPrefs();
+
+  // Apply URL Query Parameters (?form=S6 & ?class=6A & ?subj=BM_X3 & ?end=2027-02-26)
+  const urlTargetSubj = applyUrlQueryParams();
+
+  const brandEl = document.getElementById('brandSchoolName');
+  brandEl.textContent = state.calendar.schoolName || '課堂倒數';
+  document.getElementById('brandYearText').textContent = state.calendar.acadYear;
+
+  populateClassDropdowns();
+  initDates(state.selectedForm, true);
+  syncElectiveControlsForCurrentClass();
+  switchTab('subjects');
+  recalculate();
+
+  // If URL specifies ?subj=..., jump straight to that Single-Subject Poster View!
+  if (urlTargetSubj && state.computed) {
+    const matched = state.computed.subjectStats.find(s =>
+      s.id.toUpperCase() === urlTargetSubj || s.code.toUpperCase() === urlTargetSubj
+    );
+    if (matched) {
+      openSingleView(matched.id, true);
+    }
+  }
+}
+
+function loadUserPrefs() {
+  try {
+    const raw = localStorage.getItem(LS_PREF_KEY);
+    if (!raw) return;
+    const prefs = JSON.parse(raw);
+    if (prefs.selectedForm && Object.values(state.classesCompiled).some(c => c.form === prefs.selectedForm)) {
+      state.selectedForm = prefs.selectedForm;
+    }
+    if (prefs.selectedClass && state.classesCompiled[prefs.selectedClass]) {
+      state.selectedClass = prefs.selectedClass;
+      state.selectedForm = state.classesCompiled[prefs.selectedClass].form;
+    }
+    if (prefs.myElectivesByForm && typeof prefs.myElectivesByForm === 'object') {
+      state.myElectivesByForm = prefs.myElectivesByForm;
+    }
+    const curMy = state.myElectivesByForm[state.selectedForm];
+    if (curMy && (curMy.X1 || curMy.X2 || curMy.X3)) {
+      state.groupFilter = 'MINE';
+    }
+  } catch (e) {}
+}
+
+function saveUserPrefs() {
+  try {
+    localStorage.setItem(LS_PREF_KEY, JSON.stringify({
+      selectedForm: state.selectedForm,
+      selectedClass: state.selectedClass,
+      myElectivesByForm: state.myElectivesByForm
+    }));
+  } catch (e) {}
+}
+
+function applyUrlQueryParams() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const qForm = (params.get('form') || '').trim().toUpperCase();
+    const qClass = (params.get('class') || params.get('cls') || '').trim().toUpperCase();
+    const qSubj = (params.get('subj') || params.get('subject') || '').trim().toUpperCase();
+    const qEnd = (params.get('end') || '').trim();
+
+    if (qForm && Object.values(state.classesCompiled).some(c => c.form === qForm)) {
+      state.selectedForm = qForm;
+    }
+    if (qClass) {
+      // Accept either 'S6-6A' or '6A'
+      const foundKey = Object.keys(state.classesCompiled).find(k =>
+        k.toUpperCase() === qClass || state.classesCompiled[k].className.toUpperCase() === qClass
+      );
+      if (foundKey) {
+        state.selectedClass = foundKey;
+        state.selectedForm = state.classesCompiled[foundKey].form;
+      }
+    }
+    if (/^\d{4}-\d{2}-\d{2}$/.test(qEnd)) {
+      state.endDate = qEnd;
+    }
+    return qSubj || null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function syncBrowserUrlBar() {
+  try {
+    if (window.location.protocol === 'file:') return;
+    const cls = state.classesCompiled[state.selectedClass];
+    if (!cls) return;
+    const params = new URLSearchParams();
+    params.set('class', cls.className);
+    if (state.activeSingleId) params.set('subj', state.activeSingleId);
+    const nextUrl = window.location.pathname + '?' + params.toString();
+    window.history.replaceState(null, '', nextUrl);
+  } catch (e) {}
+}
+
+function populateClassDropdowns() {
+  const forms = Array.from(new Set(Object.values(state.classesCompiled).map(c => c.form))).sort();
+  if (!forms.includes(state.selectedForm)) state.selectedForm = forms.includes('S6') ? 'S6' : forms[0];
+  const labels = { S1: '中一', S2: '中二', S3: '中三', S4: '中四', S5: '中五', S6: '中六' };
+  document.getElementById('formSelect').innerHTML = forms.map(f =>
+    `<option value="${f}" ${f === state.selectedForm ? 'selected' : ''}>${labels[f] || f}</option>`
+  ).join('');
+  refreshClassSelect();
+}
+
+function refreshClassSelect() {
+  const keys = Object.keys(state.classesCompiled).filter(k => state.classesCompiled[k].form === state.selectedForm).sort();
+  if (!keys.includes(state.selectedClass)) state.selectedClass = keys[0];
+  document.getElementById('classSelect').innerHTML = keys.map(k =>
+    `<option value="${k}" ${k === state.selectedClass ? 'selected' : ''}>${state.classesCompiled[k].className} 班</option>`
+  ).join('');
+}
+
+function hasElectivesInClass(cls) {
+  return cls && cls.subjects && cls.subjects.some(s => ['X1', 'X2', 'X3'].includes(s.group));
+}
+
+function hasSavedElectivesForForm(form) {
+  const m = state.myElectivesByForm[form];
+  return Boolean(m && (m.X1 || m.X2 || m.X3));
+}
+
+function syncElectiveControlsForCurrentClass() {
+  const cls = state.classesCompiled[state.selectedClass];
+  const hasEl = hasElectivesInClass(cls);
+  const elBtn = document.getElementById('myElectivesBtn');
+  const mineBtn = document.getElementById('mineTabBtn');
+  const drawer = document.getElementById('myElectivesDrawer');
+
+  if (!hasEl) {
+    elBtn?.classList.add('hidden');
+    mineBtn?.classList.add('hidden');
+    drawer?.classList.add('hidden');
+    if (state.groupFilter === 'MINE') state.groupFilter = 'ALL';
+  } else {
+    elBtn?.classList.remove('hidden');
+    const saved = hasSavedElectivesForForm(cls.form);
+    mineBtn?.classList.toggle('hidden', !saved);
+    elBtn.textContent = saved ? '修改我的選修' : '設定我的選修';
+    if (!saved && state.groupFilter === 'MINE') state.groupFilter = 'ALL';
+    populateMyElectivesDropdowns(cls);
+  }
+
+  document.querySelectorAll('#groupTabs .seg-btn').forEach(b =>
+    b.classList.toggle('active', b.getAttribute('data-grp') === state.groupFilter)
+  );
+}
+
+function populateMyElectivesDropdowns(cls) {
+  const cur = state.myElectivesByForm[cls.form] || {};
+  ['X1', 'X2', 'X3'].forEach(blk => {
+    const sel = document.getElementById('selMy' + blk);
+    const lbl = document.getElementById('lblMy' + blk);
+    if (!sel) return;
+    if (lbl && state.theme.groupColorMode !== 'off') {
+      lbl.style.color = getGroupColor(blk);
+    }
+    const opts = cls.subjects.filter(s => s.group === blk);
+    sel.innerHTML = `<option value="">（未修讀 / 顯示全部 ${blk}）</option>` +
+      opts.map(o => `<option value="${escapeHtml(o.id)}" ${cur[blk] === o.id ? 'selected' : ''}>${escapeHtml(o.name)} (${escapeHtml(o.code)})</option>`).join('');
+  });
+}
+
+function toggleMyElectivesDrawer() {
+  const dr = document.getElementById('myElectivesDrawer');
+  if (!dr) return;
+  const cls = state.classesCompiled[state.selectedClass];
+  if (cls) populateMyElectivesDropdowns(cls);
+  dr.classList.toggle('hidden');
+}
+
+function saveAndApplyMyElectives() {
+  const cls = state.classesCompiled[state.selectedClass];
+  if (!cls) return;
+  const picked = {
+    X1: document.getElementById('selMyX1').value || '',
+    X2: document.getElementById('selMyX2').value || '',
+    X3: document.getElementById('selMyX3').value || ''
+  };
+  state.myElectivesByForm[cls.form] = picked;
+  if (picked.X1 || picked.X2 || picked.X3) {
+    state.groupFilter = 'MINE';
+  } else {
+    state.groupFilter = 'ALL';
+  }
+  saveUserPrefs();
+  document.getElementById('myElectivesDrawer')?.classList.add('hidden');
+  syncElectiveControlsForCurrentClass();
+  renderSubjectCards();
+  renderClassTimetable();
+}
+
+function clearMyElectives() {
+  const cls = state.classesCompiled[state.selectedClass];
+  if (!cls) return;
+  delete state.myElectivesByForm[cls.form];
+  state.groupFilter = 'ALL';
+  saveUserPrefs();
+  document.getElementById('myElectivesDrawer')?.classList.add('hidden');
+  syncElectiveControlsForCurrentClass();
+  renderSubjectCards();
+  renderClassTimetable();
+}
+
+function initDates(form, keepExisting = false) {
+  const today = getTodayISO();
+  const days = state.calendar.days;
+  const first = days[0]?.date || '2026-09-01';
+  const last = days[days.length - 1]?.date || '2027-07-15';
+
+  if (!keepExisting || !state.startDate) {
+    state.startDate = (today >= first && today <= last) ? today : first;
+  }
+  document.getElementById('startDateInput').value = state.startDate;
+
+  if (!keepExisting || !state.endDate) {
+    const y2 = state.calendar.endYear;
+    if (form === 'S6') {
+      const feb = days.filter(d => d.date.startsWith(`${y2}-02`) && d.cycleDay && !d.markers.includes('M'));
+      state.endDate = feb.length ? feb[feb.length - 1].date : `${y2}-02-26`;
+    } else {
+      const reg = days.filter(d => d.cycleDay && !d.markers.includes('E') && !d.markers.includes('T'));
+      state.endDate = reg.length ? reg[reg.length - 1].date : `${y2}-06-02`;
+    }
+  }
+  document.getElementById('endDateInput').value = state.endDate;
+}
+
+function toggleDateDrawer() {
+  document.getElementById('dateDrawer').classList.toggle('hidden');
+}
+
+function onFormChange() {
+  state.selectedForm = document.getElementById('formSelect').value;
+  refreshClassSelect();
+  state.endDate = '';
+  initDates(state.selectedForm, false);
+  if (hasSavedElectivesForForm(state.selectedForm)) state.groupFilter = 'MINE';
+  else if (state.groupFilter === 'MINE') state.groupFilter = 'ALL';
+  syncElectiveControlsForCurrentClass();
+  saveUserPrefs();
+  syncBrowserUrlBar();
+  recalculate();
+}
+
+function onClassChange() {
+  state.selectedClass = document.getElementById('classSelect').value;
+  syncElectiveControlsForCurrentClass();
+  saveUserPrefs();
+  syncBrowserUrlBar();
+  recalculate();
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('#portalTabs .seg-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-tab') === tab));
+  document.getElementById('panelSubjects').classList.toggle('hidden', tab !== 'subjects');
+  document.getElementById('panelAdmin')?.classList.toggle('hidden', tab !== 'admin');
+}
+
+function setGroupFilter(grp) {
+  state.groupFilter = grp;
+  document.querySelectorAll('#groupTabs .seg-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-grp') === grp));
+  renderSubjectCards();
+}
+
+// ============================================================================
+// 5. 渲染留白卡片與互動日曆
+// ============================================================================
+function recalculate() {
+  const cls = state.classesCompiled[state.selectedClass];
+  if (!cls) return;
+
+  state.startDate = document.getElementById('startDateInput').value;
+  state.endDate = document.getElementById('endDateInput').value;
+  const deductToday = document.getElementById('deductTodayInput').checked;
+  const todayISO = getTodayISO();
+
+  const allYearDays = state.calendar.days.filter(d => d.date <= state.endDate && isEffectiveTeaching(d, cls.form));
+  const remDays = allYearDays.filter(d => d.date >= state.startDate);
+  const subjectStats = cls.subjects.map(s => computeStat(s, cls.periods, allYearDays, state.startDate, deductToday, todayISO));
+
+  state.computed = { cls, allYearDays, remDays, subjectStats, deductToday, todayISO };
+
+  document.getElementById('summaryPillText').innerHTML =
+    `計至 ${formatShortDate(state.endDate)} · 尚餘 <strong>${remDays.length}</strong> 上課天`;
+
+  renderMilestoneChips(cls.form);
+  renderSubjectCards();
+  renderClassTimetable();
+  renderCalendar();
+
+  if (state.activeSingleId) renderSinglePreview(state.activeSingleId);
+}
+
+function renderMilestoneChips(form) {
+  const y1 = state.calendar.startYear, y2 = state.calendar.endYear;
+  const presets = form === 'S6'
+    ? [
+        { label: '第二次模擬試前', date: `${y2}-01-18` },
+        { label: '農曆新年假前', date: `${y2}-02-02` },
+        { label: '2月底最後上課日', date: `${y2}-02-26` },
+        { label: '3月測驗周前', date: `${y2}-03-17` }
+      ]
+    : [
+        { label: '聖誕假前', date: `${y1}-12-21` },
+        { label: '復活節測驗周前', date: `${y2}-03-17` },
+        { label: '下學期考試前', date: `${y2}-06-02` }
+      ];
+
+  document.getElementById('milestoneRow').innerHTML = presets.map(p =>
+    `<button class="chip ${state.endDate === p.date ? 'active' : ''}" onclick="setEndQuick('${p.date}')">${p.label} (${formatShortDate(p.date)})</button>`
+  ).join('');
+}
+
+function setEndQuick(dt) {
+  document.getElementById('endDateInput').value = dt;
+  recalculate();
+}
+
+function renderSubjectCards() {
+  const { subjectStats } = state.computed;
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const density = state.theme.density;
+
+  const myEl = state.myElectivesByForm[state.computed.cls.form] || {};
+  const pri = { CHIN: 1, ENG: 2, MACO: 3, MATH: 3, CS: 4, CES: 4 };
+  const list = subjectStats.filter(s => {
+    if (state.groupFilter === 'MINE') {
+      if (s.group !== 'CORE') {
+        const pickedId = myEl[s.group];
+        if (pickedId && s.id !== pickedId) return false;
+      }
+    } else if (state.groupFilter !== 'ALL' && s.group !== state.groupFilter) {
+      return false;
+    }
+    if (q && !`${s.code} ${s.name} ${s.teachers} ${s.rooms}`.toLowerCase().includes(q)) return false;
+    return true;
+  }).sort((a, b) => {
+    const pa = pri[a.code] || (a.group === 'CORE' ? 10 : 20);
+    const pb = pri[b.code] || (b.group === 'CORE' ? 10 : 20);
+    return pa !== pb ? pa - pb : b.remainingPeriods - a.remainingPeriods;
+  });
+
+  const grid = document.getElementById('subjectCardsGrid');
+  if (!list.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1; padding:48px; text-align:center; color:var(--muted); font-size:var(--fs-sm);">找不到相符科目</div>`;
+    return;
+  }
+
+  const gMode = state.theme.groupColorMode || 'tinted';
+  const darkBg = hexToLum(state.theme.bg) < 0.35;
+
+  grid.innerHTML = list.map(s => {
+    const grp = s.group === 'CORE' ? '核心' : `選修 ${s.group}`;
+    let extraHtml = '';
+    if (density === 'balanced') {
+      extraHtml = `<div class="subj-card-extra">共 ${s.remainingSessions} 堂</div>`;
+    } else if (density === 'detailed') {
+      const tPart = s.teachers ? `${escapeHtml(s.teachers)} · ` : (s.rooms ? `課室 ${escapeHtml(s.rooms)} · ` : '');
+      extraHtml = `<div class="subj-card-extra">共 ${s.remainingSessions} 堂 · ${tPart}進度 ${s.progressPct}%</div>`;
+    }
+
+    let cardStyle = '';
+    let pillClass = 'grp-pill plain';
+    if (gMode !== 'off') {
+      const gc = getGroupColor(s.group);
+      const pillBg = mixHex(state.theme.surface, gc, darkBg ? 0.24 : 0.13);
+      const hoverBdr = mixHex(state.theme.surface, gc, darkBg ? 0.55 : 0.42);
+      pillClass = 'grp-pill';
+      if (gMode === 'tinted') {
+        const cardBg = mixHex(state.theme.surface, gc, darkBg ? 0.12 : 0.06);
+        const cardBdr = mixHex(state.theme.surface, gc, darkBg ? 0.26 : 0.18);
+        cardStyle = `--card-bg:${cardBg}; --card-border:${cardBdr}; --card-hover-border:${hoverBdr}; --pill-bg:${pillBg}; --pill-fg:${gc}; --card-num-color:${gc};`;
+      } else {
+        // 'accent': crisp surface with colored top accent line, badge & number
+        const cardBdr = mixHex(state.theme.surface, gc, darkBg ? 0.20 : 0.14);
+        cardStyle = `--card-border:${cardBdr}; --card-hover-border:${hoverBdr}; --pill-bg:${pillBg}; --pill-fg:${gc}; --card-num-color:${gc}; border-top: 3px solid ${gc};`;
+      }
+    }
+
+    return `
+      <article class="subj-card" style="${cardStyle}" onclick="openSingleView('${escapeHtml(s.id)}')">
+        <div>
+          <div class="subj-card-top">
+            <span class="${pillClass}">${grp}</span>
+            <span>${escapeHtml(s.code)}</span>
+          </div>
+          <h3 class="subj-card-name">${escapeHtml(s.name)}</h3>
+          ${extraHtml}
+        </div>
+        <div class="subj-card-bottom">
+          <div>
+            <span class="subj-card-num">${s.remainingPeriods}</span>
+            <span class="subj-card-unit">節</span>
+          </div>
+          <span class="subj-card-cta">單科版面 →</span>
+        </div>
+      </article>
+    `;
+  }).join('');
+}
+
+function renderClassTimetable() {
+  const { cls, remDays } = state.computed;
+  const titleEl = document.getElementById('ttSectionTitle');
+  if (titleEl) {
+    titleEl.textContent = `${cls.className} 班時間表${cls.room ? '（課室 ' + cls.room + '）' : ''}`;
+  }
+
+  const dayCounts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+  remDays.forEach(d => {
+    if (d.cycleDay >= 1 && d.cycleDay <= 7) dayCounts[d.cycleDay]++;
+  });
+
+  const gMode = state.theme.groupColorMode || 'tinted';
+  const darkBg = hexToLum(state.theme.bg) < 0.35;
+
+  const thead = `<thead><tr><th class="tt-period-col">節數</th>` +
+    [1, 2, 3, 4, 5, 6, 7].map(d =>
+      `<th>Day ${d}<span class="tt-day-rem">餘 ${dayCounts[d]} 日</span></th>`
+    ).join('') + `</tr></thead>`;
+
+  const tbody = `<tbody>` + cls.periods.map((p, pIdx) => {
+    const rowCells = cls.grid[pIdx].map((raw, dIdx) => {
+      const txt = String(raw || '').trim();
+      if (!txt) return `<td>—</td>`;
+
+      const isBlk = /^X[123]$/i.test(txt);
+      const grpKey = isBlk ? txt.toUpperCase() : 'CORE';
+      let cellStyle = '';
+      if (gMode !== 'off') {
+        const gc = getGroupColor(grpKey);
+        if (gMode === 'tinted') {
+          const bg = mixHex(state.theme.surface, gc, isBlk ? (darkBg ? 0.22 : 0.11) : (darkBg ? 0.08 : 0.04));
+          cellStyle = `background:${bg}; color:${gc};`;
+        } else {
+          cellStyle = `color:${gc};`;
+        }
+      }
+
+      if (isBlk) {
+        const myPickedId = (state.myElectivesByForm[cls.form] || {})[grpKey];
+        const pickedSubj = myPickedId ? cls.subjects.find(sub => sub.id === myPickedId) : null;
+        if (pickedSubj) {
+          const hasSlotHere = pickedSubj.slots.some(sl => sl.day === (dIdx + 1) && sl.period === p.num);
+          if (!hasSlotHere) {
+            return `<td style="color:var(--muted); opacity:0.55;">自修節<div style="font-size:var(--fs-xs);">${grpKey}</div></td>`;
+          }
+          const subMeta = [pickedSubj.teachers, pickedSubj.rooms].filter(Boolean).join(' ');
+          return `<td style="${cellStyle}">` +
+            `<div style="font-weight:700;">${escapeHtml(pickedSubj.name)}</div>` +
+            (state.theme.density !== 'minimal' && subMeta ? `<div style="font-size:var(--fs-xs); opacity:0.78;">${escapeHtml(subMeta)}</div>` : `<div style="font-size:var(--fs-xs); opacity:0.7;">${grpKey}</div>`) +
+          `</td>`;
+        }
+        return `<td style="${cellStyle} font-weight:700;">選修 ${grpKey}</td>`;
+      }
+
+      const lines = txt.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+      const htmlLines = lines.map(line => {
+        const tk = line.split(/\s+/);
+        const code = tk[0];
+        const zh = SUBJECT_DICT[code] || code;
+        const meta = tk.slice(1).join(' ');
+        return `<div style="font-weight:600;">${escapeHtml(zh)}</div>` +
+               (state.theme.density !== 'minimal' && meta ? `<div style="font-size:var(--fs-xs); opacity:0.72;">${escapeHtml(meta)}</div>` : '');
+      }).join('<div style="height:4px;"></div>');
+
+      return `<td style="${cellStyle}">${htmlLines}</td>`;
+    }).join('');
+
+    return `<tr><td class="tt-period-col">第 ${p.num} 節<span class="tt-time">${p.start}–${p.end}</span></td>${rowCells}</tr>`;
+  }).join('') + `</tbody>`;
+
+  const tbl = document.getElementById('classTimetableGrid');
+  if (tbl) tbl.innerHTML = thead + tbody;
+
+  const leg = document.getElementById('classElectiveLegend');
+  if (leg) {
+    const parts = ['X1', 'X2', 'X3'].filter(k => cls.electivesRaw && cls.electivesRaw[k]).map(k => {
+      const c = gMode !== 'off' ? getGroupColor(k) : 'var(--text)';
+      return `<div><strong style="color:${c};">選修 ${k}：</strong>${escapeHtml(cls.electivesRaw[k])}</div>`;
+    });
+    leg.innerHTML = parts.join('');
+    leg.classList.toggle('hidden', parts.length === 0);
+  }
+}
+
+function renderCalendar() {
+  const { cls } = state.computed;
+  const byMonth = {};
+  state.calendar.days.forEach(d => {
+    const ym = d.date.slice(0, 7);
+    if (!byMonth[ym]) byMonth[ym] = [];
+    byMonth[ym].push(d);
+  });
+
+  document.getElementById('calMonthsContainer').innerHTML = Object.entries(byMonth).map(([ym, arr]) => {
+    const [yr, mo] = ym.split('-').map(Number);
+    const firstDow = new Date(yr, mo - 1, 1).getDay();
+    const dim = new Date(yr, mo, 0).getDate();
+    const map = {};
+    arr.forEach(d => { map[parseInt(d.date.slice(8), 10)] = d; });
+
+    let cells = '';
+    for (let i = 0; i < firstDow; i++) cells += `<div></div>`;
+    for (let day = 1; day <= dim; day++) {
+      const dObj = map[day];
+      const dtStr = `${ym}-${String(day).padStart(2, '0')}`;
+      const dow = (firstDow + day - 1) % 7;
+      if (!dObj || dow === 0 || dow === 6) {
+        cells += `<div class="cal-cell wknd">${day}</div>`;
+        continue;
+      }
+      const inRange = dtStr >= state.startDate && dtStr <= state.endDate;
+      const on = isEffectiveTeaching(dObj, cls.form);
+      const ovr = Object.prototype.hasOwnProperty.call(state.dateOverrides, `${cls.form}:${dtStr}`);
+
+      let clsStr = 'cal-cell ' + (on ? (inRange ? 'on' : 'out') : 'off') + (ovr ? ' ovr' : '');
+      const sub = (dObj.markers.includes('M') && cls.form === 'S6') ? 'M' : (dObj.cycleDay ? `D${dObj.cycleDay}` : '休');
+      cells += `<button class="${clsStr}" onclick="toggleOverride('${dtStr}')" title="${escapeHtml(dtStr + (dObj.event ? ' · ' + dObj.event : ''))}"><span>${day}</span><small>${sub}</small></button>`;
+    }
+
+    return `
+      <div class="cal-card">
+        <div class="cal-title">${yr} 年 ${mo} 月</div>
+        <div class="cal-wk"><div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div></div>
+        <div class="cal-cells">${cells}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleOverride(dtStr) {
+  const form = state.computed.cls.form;
+  const dObj = state.calendar.days.find(d => d.date === dtStr);
+  if (!dObj) return;
+  const cur = isEffectiveTeaching(dObj, form);
+  if (!cur && !dObj.cycleDay) {
+    alert(`${dtStr} 無循環周日編號，無法自動對應時間表。`);
+    return;
+  }
+  const key = `${form}:${dtStr}`;
+  const next = !cur;
+  if (next === isDefaultTeaching(dObj, form)) delete state.dateOverrides[key];
+  else state.dateOverrides[key] = next;
+  recalculate();
+}
+
+function resetOverrides() {
+  state.dateOverrides = {};
+  recalculate();
+}
+
+// ============================================================================
+// 6. 單一科目海報式倒數視圖
+// ============================================================================
+const WK_ZH = ['日', '一', '二', '三', '四', '五', '六'];
+
+function openSingleView(subjId, skipScroll = false) {
+  state.activeSingleId = subjId;
+  state.singleAccentOverride = false;
+  document.getElementById('portalRoot').classList.add('hidden');
+  document.getElementById('singleRoot').classList.remove('hidden');
+  document.getElementById('modalDeductToday').checked = document.getElementById('deductTodayInput').checked;
+  renderSinglePreview(subjId);
+  syncBrowserUrlBar();
+  if (!skipScroll) window.scrollTo({ top: 0 });
+}
+
+function exitSingleView() {
+  state.activeSingleId = null;
+  document.getElementById('singleRoot').classList.add('hidden');
+  document.getElementById('portalRoot').classList.remove('hidden');
+  syncBrowserUrlBar();
+}
+
+function syncDeductToday(checked) {
+  if (state.mode === 'SINGLE') {
+    renderStandaloneSingle();
+  } else {
+    document.getElementById('deductTodayInput').checked = checked;
+    recalculate();
+  }
+}
+
+function resolveSingleEffectiveAccent(stat) {
+  if (state.mode !== 'SINGLE' && state.theme.groupColorMode !== 'off' && !state.singleAccentOverride) {
+    return getGroupColor(stat.group);
+  }
+  return state.theme.accent;
+}
+
+function populatePoster(stat, meta) {
+  document.title = `${stat.name}（${meta.className}）· 課堂倒數`;
+  const density = state.theme.density;
+  const effAccent = resolveSingleEffectiveAccent(stat);
+  const darkBg = hexToLum(state.theme.bg) < 0.35;
+
+  const eyebrowEl = document.getElementById('posterEyebrow');
+  const eyebrowParts = density === 'minimal'
+    ? [meta.className, stat.group === 'CORE' ? '核心' : stat.group, stat.code]
+    : [meta.schoolName, `${meta.className} 班`, stat.group === 'CORE' ? '核心' : '選修 ' + stat.group].filter(Boolean);
+  const eyebrowText = eyebrowParts.join('  ·  ');
+
+  if (state.theme.groupColorMode !== 'off' && !state.singleAccentOverride) {
+    const pillBg = mixHex(state.theme.surface, effAccent, darkBg ? 0.24 : 0.12);
+    eyebrowEl.innerHTML = `<span class="poster-eyebrow-pill" style="background:${pillBg}; color:${effAccent};">${escapeHtml(eyebrowText)}</span>`;
+  } else {
+    eyebrowEl.textContent = eyebrowText;
+  }
+
+  document.getElementById('posterSubjectName').textContent = stat.name;
+  const heroNumEl = document.getElementById('posterHeroNum');
+  heroNumEl.textContent = stat.remainingPeriods;
+  heroNumEl.style.color = effAccent;
+
+  const fillEl = document.getElementById('posterHairlineFill');
+  fillEl.style.width = `${stat.progressPct}%`;
+  fillEl.style.background = effAccent;
+
+  const exBtn = document.getElementById('exportSingleBtn');
+  if (exBtn) {
+    const darkEff = hexToLum(effAccent) < 0.45;
+    exBtn.style.background = effAccent;
+    exBtn.style.borderColor = effAccent;
+    exBtn.style.color = darkEff ? '#FFFFFF' : '#111111';
+  }
+
+  const next = stat.upcomingLessons[0];
+  const nextBrief = next ? `下堂 ${formatShortDate(next.date)}` : '區間內課堂已完成';
+
+  const cap1 = document.getElementById('posterPrimaryCaption');
+  const cap2 = document.getElementById('posterSecondaryCaption');
+
+  if (density === 'minimal') {
+    cap1.textContent = `共 ${stat.remainingSessions} 堂  ·  ${nextBrief}`;
+    cap2.classList.add('hidden');
+  } else if (density === 'balanced') {
+    cap1.textContent = `共 ${stat.remainingSessions} 堂課  ·  ${next ? `${nextBrief}（Day ${next.cycleDay} 第 ${next.startPeriod}${next.endPeriod !== next.startPeriod ? '–' + next.endPeriod : ''} 節）` : nextBrief}`;
+    cap2.textContent = `課室 ${stat.rooms || '—'}  ·  學年進度 ${stat.progressPct}%`;
+    cap2.classList.remove('hidden');
+  } else {
+    cap1.textContent = `共 ${stat.remainingSessions} 堂（約 ${stat.remainingHours} 小時） ·  ${next ? `${nextBrief} Day ${next.cycleDay} (${next.startTime}–${next.endTime})` : nextBrief}`;
+    const detailItems = [
+      stat.teachers ? `任教 ${stat.teachers}` : '',
+      stat.rooms ? `課室 ${stat.rooms}` : '',
+      `進度 ${stat.completedPeriods}/${stat.totalYearPeriods} 節 (${stat.progressPct}%)`,
+      `計至 ${formatShortDate(meta.endDate)}`
+    ].filter(Boolean);
+    cap2.textContent = detailItems.join('  ·  ');
+    cap2.classList.remove('hidden');
+  }
+
+  document.getElementById('openScheduleBtn').textContent = `查看課堂時間表（${stat.upcomingLessons.length} 堂）`;
+
+  document.getElementById('modalTitle').textContent = `${meta.className} 班 · ${stat.name}`;
+  const modalMetaItems = [
+    stat.teachers ? `任教：${stat.teachers}` : '',
+    stat.rooms ? `課室：${stat.rooms}` : '',
+    `約 ${stat.remainingHours} 小時`
+  ].filter(Boolean);
+  document.getElementById('modalMeta').textContent = modalMetaItems.join('  ｜  ');
+  document.getElementById('modalRangeInfo').textContent = `${meta.startDate} 至 ${meta.endDate}`;
+
+  const tl = document.getElementById('modalTimelineContainer');
+  if (!stat.upcomingLessons.length) {
+    tl.innerHTML = `<div style="padding:36px 0; text-align:center; color:var(--muted); font-size:var(--fs-sm);">區間內已無剩餘課堂</div>`;
+  } else {
+    tl.innerHTML = stat.upcomingLessons.map((les, i) => `
+      <div class="timeline-row">
+        <div>
+          <span style="color:var(--muted); font-family:var(--font-num); margin-right:10px;">${String(i + 1).padStart(2, '0')}</span>
+          <span style="font-weight:500;">${formatShortDate(les.date)}（週${WK_ZH[les.weekday]}）</span>
+          <span style="color:var(--muted); margin-left:8px;">Day ${les.cycleDay}</span>
+        </div>
+        <div style="color:var(--muted);">
+          第 ${les.startPeriod}${les.endPeriod !== les.startPeriod ? '–' + les.endPeriod : ''} 節 · ${les.startTime}–${les.endTime}
+        </div>
+      </div>
+    `).join('');
+  }
+}
+
+function renderSinglePreview(subjId) {
+  const { cls, subjectStats } = state.computed;
+  const stat = subjectStats.find(s => s.id === subjId);
+  if (!stat) return;
+  populatePoster(stat, {
+    schoolName: state.calendar.schoolName,
+    acadYear: state.calendar.acadYear,
+    form: cls.form,
+    className: cls.className,
+    startDate: state.startDate,
+    endDate: state.endDate
+  });
+}
+
+function renderStandaloneSingle() {
+  const cfg = APP_CONFIG.singleSubject;
+  const deductToday = document.getElementById('modalDeductToday').checked;
+  const todayISO = getTodayISO();
+  const liveStart = todayISO > cfg.startDate ? todayISO : cfg.startDate;
+  const allYearDays = state.calendar.days.filter(d => d.date <= cfg.endDate && isEffectiveTeaching(d, cfg.form));
+  const stat = computeStat(cfg.subject, cfg.periods, allYearDays, liveStart, deductToday, todayISO);
+
+  populatePoster(stat, {
+    schoolName: state.calendar.schoolName,
+    acadYear: state.calendar.acadYear,
+    form: cfg.form,
+    className: cfg.className,
+    startDate: liveStart,
+    endDate: cfg.endDate
+  });
+}
+
+function openScheduleModal() {
+  document.getElementById('scheduleModal').classList.add('open');
+}
+function closeScheduleModal() {
+  document.getElementById('scheduleModal').classList.remove('open');
+}
+
+// ============================================================================
+// 7. 零污染三層保密打包匯出引擎 (基於 PRISTINE_TEMPLATE_HTML 重組，杜絕空白頁)
+// ============================================================================
+function buildExportHTML(newConfig) {
+  const cleanRoot = (PRISTINE_DOC_CLONE || document.documentElement).cloneNode(true);
+  cleanRoot.removeAttribute('style');
+
+  // 1. In LOCKED or SINGLE builds: remove SheetJS & Admin Import/Export DOM nodes completely
+  if (newConfig.mode !== 'MASTER') {
+    cleanRoot.querySelectorAll('script[src*="xlsx"]').forEach(el => el.remove());
+    cleanRoot.querySelector('#adminTabBtn')?.remove();
+    cleanRoot.querySelector('#panelAdmin')?.remove();
+    cleanRoot.querySelector('#portalTabs')?.classList.add('hidden');
+    cleanRoot.querySelector('#readonlyBadge')?.classList.remove('hidden');
+  }
+
+  // 2. In SINGLE builds: remove multi-subject portal & portal-only buttons; unhide #singleRoot immediately
+  if (newConfig.mode === 'SINGLE') {
+    cleanRoot.querySelector('#portalRoot')?.remove();
+    cleanRoot.querySelector('#backBtn')?.remove();
+    cleanRoot.querySelector('#shareSingleLinkBtn')?.remove();
+    cleanRoot.querySelector('#exportSingleBtn')?.remove();
+    cleanRoot.querySelector('#singleRoot')?.classList.remove('hidden');
+  } else {
+    if (newConfig.desensitized) {
+      cleanRoot.querySelector('#readonlyBadge')?.classList.add('hidden');
+      const bn = cleanRoot.querySelector('#brandSchoolName');
+      if (bn) bn.textContent = newConfig.calendar.schoolName || '課堂倒數';
+    }
+    // Guarantee Portal & Subject Overview (including Timetable + Calendar below) are unhidden on open
+    cleanRoot.querySelector('#portalRoot')?.classList.remove('hidden');
+    cleanRoot.querySelector('#panelSubjects')?.classList.remove('hidden');
+    cleanRoot.querySelector('#singleRoot')?.classList.add('hidden');
+  }
+
+  cleanRoot.querySelector('#studioMask')?.classList.remove('open');
+  cleanRoot.querySelector('#scheduleModal')?.classList.remove('open');
+
+  let html = '<!DOCTYPE html>\n' + cleanRoot.outerHTML;
+
+  // 3. Safely serialize APP_CONFIG JSON using function replacer
+  const safeJson = JSON.stringify(newConfig).replace(/<\//g, '<\\/');
+  const cfgBlock = `/*__APP_CONFIG_START__*/\nconst APP_CONFIG = ${safeJson};\n/*__APP_CONFIG_END__*/`;
+  html = html.replace(/\/\*__APP_CONFIG_START__\*\/[\s\S]*?\/\*__APP_CONFIG_END__\*\//, () => cfgBlock);
+
+  return html;
+}
+
+function downloadFile(content, filename) {
+  const blob = new Blob(['\uFEFF' + content], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+// Deep Desensitization Helpers: strips school name, homeroom teachers, subject teacher initials & internal event notes from JSON
+function sanitizeGridCellText(cellRaw) {
+  const txt = String(cellRaw || '').trim();
+  if (!txt || /^X[123]$/i.test(txt)) return txt;
+  return txt.split(/\r?\n/).map(s => s.trim()).filter(Boolean).map(line => {
+    const tk = line.split(/\s+/);
+    const code = tk[0] || '';
+    const room = tk.length >= 3 ? tk.slice(2).join(' ') : '';
+    return [code, room].filter(Boolean).join(' ');
+  }).join('\n');
+}
+
+function sanitizeElectiveLineText(rawLine) {
+  const clean = String(rawLine || '').replace(/\u00a0/g, ' ').trim();
+  if (!clean) return '';
+  const segs = [];
+  let buf = '', depth = 0;
+  for (const ch of clean) {
+    if (ch === '(' || ch === '[') depth++;
+    else if (ch === ')' || ch === ']') depth = Math.max(0, depth - 1);
+    if (ch === '/' && depth === 0) {
+      if (buf.trim()) segs.push(buf.trim());
+      buf = '';
+    } else buf += ch;
+  }
+  if (buf.trim()) segs.push(buf.trim());
+
+  return segs.map(seg => {
+    if (/^SS\(/i.test(seg)) {
+      const cm = seg.match(/^(SS\([A-Z]+\))/i);
+      if (!cm) return '';
+      const ssCode = cm[1].toUpperCase();
+      const rest = seg.slice(cm[0].length).trim();
+      const rm = rest.match(/([A-Z]\d{3})\s*$/i);
+      const room = rm ? rm[1] : '';
+      const brackets = rest.match(/\[Day\s*\d+\s*,\s*\d+(?:\s*-\s*\d+)?\]/gi) || [];
+      return [ssCode, brackets.join(' ; '), room].filter(Boolean).join(' ');
+    }
+    const tk = seg.split(/\s+/);
+    const code = tk[0] || '';
+    const room = tk.length >= 3 ? tk.slice(2).join(' ') : '';
+    return [code, room].filter(Boolean).join(' ');
+  }).filter(Boolean).join(' / ');
+}
+
+function buildDesensitizedData(calendarObj, classesRawObj) {
+  const cleanCalendar = {
+    schoolName: '',
+    acadYear: calendarObj.acadYear,
+    startYear: calendarObj.startYear,
+    endYear: calendarObj.endYear,
+    days: calendarObj.days.map(d => ({
+      date: d.date,
+      weekday: d.weekday,
+      cycleDay: d.cycleDay,
+      cycleWeek: d.cycleWeek,
+      markers: d.markers,
+      holiday: d.holiday,
+      event: ''
+    }))
+  };
+
+  const cleanClasses = {};
+  for (const [k, c] of Object.entries(classesRawObj)) {
+    const cleanElectives = {};
+    for (const [ek, ev] of Object.entries(c.electivesRaw || {})) {
+      cleanElectives[ek] = sanitizeElectiveLineText(ev);
+    }
+    cleanClasses[k] = {
+      sheetName: c.sheetName,
+      form: c.form,
+      className: c.className,
+      teachers: '',
+      room: c.room,
+      periods: c.periods,
+      grid: c.grid.map(row => row.map(sanitizeGridCellText)),
+      electivesRaw: cleanElectives
+    };
+  }
+  return { cleanCalendar, cleanClasses };
+}
+
+function exportLockedPortalHTML() {
+  const desensitize = Boolean(document.getElementById('chkDesensitizeExport')?.checked);
+  let exportCal = state.calendar;
+  let exportCls = state.classesRaw;
+
+  if (desensitize) {
+    const res = buildDesensitizedData(state.calendar, state.classesRaw);
+    exportCal = res.cleanCalendar;
+    exportCls = res.cleanClasses;
+  }
+
+  const cfg = {
+    mode: 'LOCKED',
+    desensitized: desensitize,
+    calendar: exportCal,
+    classesRaw: exportCls,
+    dateOverrides: state.dateOverrides,
+    selectedForm: state.selectedForm,
+    selectedClass: state.selectedClass,
+    startDate: state.startDate,
+    endDate: state.endDate,
+    theme: state.theme
+  };
+  const html = buildExportHTML(cfg);
+  const fname = desensitize ? 'index.html' : `課堂倒數總覽_校內唯讀版_${state.calendar.acadYear.replace('/', '-')}.html`;
+  downloadFile(html, fname);
+}
+
+function exportSingleSubjectHTML() {
+  const { cls, subjectStats } = state.computed;
+  const subj = subjectStats.find(s => s.id === state.activeSingleId);
+  if (!subj) return;
+
+  const isAnon = state.desensitized || Boolean(document.getElementById('chkDesensitizeExport')?.checked);
+
+  const minimalCalendar = {
+    schoolName: isAnon ? '' : state.calendar.schoolName,
+    acadYear: state.calendar.acadYear,
+    startYear: state.calendar.startYear,
+    endYear: state.calendar.endYear,
+    days: state.calendar.days.map(d => ({
+      date: d.date,
+      weekday: d.weekday,
+      cycleDay: d.cycleDay,
+      cycleWeek: d.cycleWeek,
+      markers: d.markers,
+      holiday: d.holiday
+    }))
+  };
+
+  const resolvedAccent = resolveSingleEffectiveAccent(subj);
+  const singleTheme = Object.assign({}, state.theme, {
+    accent: resolvedAccent,
+    groupColorMode: 'off'
+  });
+
+  const cleanSlots = subj.slots.map(sl => ({
+    day: sl.day,
+    period: sl.period,
+    teacher: isAnon ? '' : sl.teacher,
+    room: sl.room
+  }));
+
+  const cfg = {
+    mode: 'SINGLE',
+    desensitized: isAnon,
+    calendar: minimalCalendar,
+    dateOverrides: state.dateOverrides,
+    theme: singleTheme,
+    singleSubject: {
+      id: subj.id,
+      form: cls.form,
+      className: cls.className,
+      startDate: state.startDate,
+      endDate: state.endDate,
+      periods: cls.periods,
+      subject: {
+        id: subj.id, code: subj.code, name: subj.name, group: subj.group,
+        teachers: isAnon ? '' : subj.teachers,
+        rooms: subj.rooms,
+        slots: cleanSlots
+      }
+    }
+  };
+  const html = buildExportHTML(cfg);
+  const fname = `${cls.className.toLowerCase()}-${subj.code.toLowerCase()}.html`.replace(/[^a-z0-9\-_.]/gi, '_');
+  downloadFile(html, fname);
+}
+
+// ============================================================================
+// 9. 網址參數直達連結及 QR Code 分享產生器 (供 GitHub Pages 全科發佈使用)
+// ============================================================================
+function openShareModal(targetMode) {
+  state.shareTargetMode = targetMode;
+  const isLocal = window.location.protocol === 'file:';
+  document.getElementById('shareBaseUrlNotice')?.classList.toggle('hidden', !isLocal);
+  const baseInp = document.getElementById('shareBaseUrlInput');
+  if (isLocal && baseInp && !baseInp.value) {
+    baseInp.value = 'https://keithwebber221.github.io/countdown/';
+  }
+
+  const cls = state.computed?.cls;
+  const subj = targetMode === 'SUBJECT'
+    ? state.computed?.subjectStats.find(s => s.id === state.activeSingleId)
+    : null;
+
+  document.getElementById('shareModalTitle').textContent = subj
+    ? `${cls.className} 班 · ${subj.name} 直達連結`
+    : `${cls.className} 班 · 全科倒數直達連結`;
+
+  document.getElementById('shareQrCaption').textContent = subj
+    ? `掃描直達 ${cls.className} ${subj.name}`
+    : `掃描直達 ${cls.className} 班課堂倒數`;
+
+  refreshShareUrlOutput();
+  document.getElementById('shareModal').classList.add('open');
+}
+
+function refreshShareUrlOutput() {
+  const cls = state.computed?.cls;
+  if (!cls) return;
+  const isLocal = window.location.protocol === 'file:';
+  let base = isLocal
+    ? (document.getElementById('shareBaseUrlInput')?.value.trim() || 'https://example.github.io/countdown/')
+    : (window.location.origin + window.location.pathname);
+
+  const params = new URLSearchParams();
+  params.set('class', cls.className);
+  if (state.shareTargetMode === 'SUBJECT' && state.activeSingleId) {
+    params.set('subj', state.activeSingleId);
+  }
+  const sep = base.includes('?') ? '&' : '?';
+  const finalUrl = base + sep + params.toString();
+
+  const outInp = document.getElementById('shareResultUrl');
+  if (outInp) outInp.value = finalUrl;
+
+  const qrImg = document.getElementById('shareQrImg');
+  if (qrImg) {
+    qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=8&data=' + encodeURIComponent(finalUrl);
+  }
+}
+
+function copyShareUrl() {
+  const inp = document.getElementById('shareResultUrl');
+  const btn = document.getElementById('copyShareBtn');
+  if (!inp) return;
+  navigator.clipboard?.writeText(inp.value).then(() => {
+    if (btn) {
+      const old = btn.textContent;
+      btn.textContent = '已複製！';
+      setTimeout(() => { btn.textContent = old; }, 1600);
+    }
+  }).catch(() => {
+    inp.select();
+    document.execCommand('copy');
+  });
+}
+
+function closeShareModal() {
+  document.getElementById('shareModal').classList.remove('open');
+}
+
+// ============================================================================
+// 8. Excel 匯入解析 (僅 MASTER 管理員總控版可用)
+// ============================================================================
+function onUploadCalendar(ev) {
+  if (typeof XLSX === 'undefined') return;
+  const file = ev.target.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array', cellStyles: true });
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: null, raw: false });
+
+      const title = String(rows[0]?.[0] || '');
+      const ym = title.match(/(20\d{2})\s*[\/\-]\s*(20\d{2})/);
+      const startYear = ym ? parseInt(ym[1], 10) : new Date().getFullYear();
+      const endYear = ym ? parseInt(ym[2], 10) : startYear + 1;
+      const schoolName = title.split(/\r?\n/)[0]?.trim() || '學校校曆表';
+
+      const mMap = { '九月':9,'十月':10,'十一月':11,'十二月':12,'一月':1,'二月':2,'三月':3,'四月':4,'五月':5,'六月':6,'七月':7,'八月':8 };
+      let hRow = 2, hCols = [];
+      for (let r = 0; r < Math.min(10, rows.length); r++) {
+        const cols = [];
+        (rows[r] || []).forEach((v, c) => { if (String(v || '').trim() === '月份') cols.push(c); });
+        if (cols.length) { hRow = r; hCols = cols; break; }
+      }
+      if (!hCols.length) hCols = [0, 20];
+
+      const days = [];
+      for (const sc of hCols) {
+        let curM = null;
+        for (let r = hRow + 1; r < rows.length - 1; r += 2) {
+          const mt = String(rows[r]?.[sc] || '').trim(), mb = String(rows[r+1]?.[sc] || '').trim();
+          if (mMap[mt]) curM = mMap[mt]; else if (mMap[mb]) curM = mMap[mb];
+          if (!curM) continue;
+          if (mt.includes('假期') || mb.includes('假期')) break;
+          const yr = curM >= 9 ? startYear : endYear;
+          const evText = [rows[r]?.[sc+18], rows[r+1]?.[sc+18]].map(x => String(x || '').trim()).filter(Boolean).join(' · ');
+
+          for (let wd = 0; wd < 5; wd++) {
+            const cL = sc + 2 + wd * 3, cM = cL + 1, cR = cL + 2;
+            const dRaw = String(rows[r+1]?.[cM] ?? '').trim();
+            if (!dRaw || isNaN(Number(dRaw))) continue;
+            const dInt = Math.round(Number(dRaw));
+            if (dInt < 1 || dInt > 31) continue;
+
+            const topVals = [rows[r]?.[cL], rows[r]?.[cM], rows[r]?.[cR]].map(v => String(v ?? '').trim()).filter(Boolean);
+            const cycRaw = topVals.length ? topVals[topVals.length - 1] : '';
+            let cycleDay = null, cycleWeek = null;
+            if (/^\d$/.test(cycRaw)) cycleDay = parseInt(cycRaw, 10);
+            else if (/^\d{3,}$/.test(cycRaw)) { cycleWeek = parseInt(cycRaw.slice(0,-1), 10); cycleDay = parseInt(cycRaw.slice(-1), 10); }
+
+            const markers = [rows[r+1]?.[cL], rows[r+1]?.[cR]].map(x => String(x ?? '').trim().toUpperCase()).filter(x => ['E','M','T'].includes(x));
+            const addr = XLSX.utils.encode_cell({ r: r + 1, c: cM });
+            const rgb = String(ws[addr]?.s?.fgColor?.rgb || '').toUpperCase();
+            let holiday = rgb.endsWith('FF99CC') ? 'PUBLIC' : (rgb.endsWith('CCFFCC') ? 'SCHOOL' : null);
+            if (!holiday && !cycleDay && !markers.length && /假期|翌日|國慶|元旦|佛誕|端午|紀念日|清明|中秋|重陽|暑假|勞動節|聖誕|新年|補假/.test(evText)) holiday = 'SCHOOL';
+
+            days.push({
+              date: `${yr}-${String(curM).padStart(2,'0')}-${String(dInt).padStart(2,'0')}`,
+              weekday: wd + 1, cycleDay, cycleWeek, markers, holiday, event: evText
+            });
+          }
+        }
+      }
+      days.sort((a, b) => a.date.localeCompare(b.date));
+      let cw = 0;
+      days.forEach(d => { if (d.cycleWeek) cw = d.cycleWeek; else if (d.cycleDay === 1) cw++; if (d.cycleDay && !d.cycleWeek) d.cycleWeek = cw; });
+
+      state.calendar = { schoolName, acadYear: `${startYear}/${endYear}`, startYear, endYear, days };
+      state.dateOverrides = {};
+      state.startDate = '';
+      state.endDate = '';
+      document.getElementById('calStatusText').textContent = `已更新：${file.name} (${startYear}/${endYear})`;
+      document.getElementById('brandSchoolName').textContent = schoolName;
+      document.getElementById('brandYearText').textContent = `${startYear}/${endYear}`;
+      initDates(state.selectedForm, false);
+      recalculate();
+    } catch (err) {
+      alert('校曆表解析失敗：' + err.message);
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function onUploadTimetable(ev) {
+  if (typeof XLSX === 'undefined') return;
+  const file = ev.target.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+      const parsed = {};
+      for (const sname of wb.SheetNames) {
+        const ws = wb.Sheets[sname];
+        const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: null, raw: false });
+        if (!rows || rows.length < 8) continue;
+        const m = sname.trim().match(/^(S[1-6])[-_\s]*([1-6][A-Z])$/i);
+        if (!m) continue;
+        const form = m[1].toUpperCase(), className = m[2].toUpperCase();
+
+        let teachers = '', room = '';
+        for (let r = 0; r < Math.min(5, rows.length); r++) {
+          const l = String(rows[r]?.[0] || '');
+          if (/Timetable:/i.test(l)) {
+            const tm = l.match(/Class Teacher\(s\)\s*:\s*(.*?)(?:Home Room\s*:|$)/i);
+            const rm = l.match(/Home Room\s*:\s*(\S+)/i);
+            if (tm) teachers = tm[1].trim();
+            if (rm) room = rm[1].trim();
+          }
+        }
+
+        let dRow = -1, dCols = [];
+        for (let r = 0; r < Math.min(8, rows.length); r++) {
+          const cols = [];
+          (rows[r] || []).forEach((v, c) => { if (/^Day\s*[1-7]$/i.test(String(v || '').trim())) cols.push(c); });
+          if (cols.length >= 5) { dRow = r; dCols = cols; break; }
+        }
+        if (dRow === -1) continue;
+
+        const periods = [], grid = [], electivesRaw = {};
+        let curEl = null;
+        for (let r = dRow + 1; r < rows.length; r++) {
+          const c0 = String(rows[r]?.[0] ?? '').trim(), c1 = String(rows[r]?.[1] ?? '').trim();
+          const elm = c0.match(/Elective\s*(X[123])/i);
+          if (elm) { curEl = elm[1].toUpperCase(); electivesRaw[curEl] = c1; continue; }
+          if (curEl && !c0 && c1) { electivesRaw[curEl] += ' / ' + c1; continue; }
+          if (curEl && c0) curEl = null;
+          if (/Morning Assembly|Recess|Lunch|Roll Call/i.test(c1)) continue;
+          const tm = c0.replace(/\s+/g, '').match(/(\d{2}:\d{2})-(\d{2}:\d{2})/);
+          if (!tm) continue;
+          periods.push({ num: periods.length + 1, start: tm[1], end: tm[2] });
+          grid.push(dCols.map(c => String(rows[r]?.[c] ?? '').trim()));
+        }
+        parsed[`${form}-${className}`] = { sheetName: `${form}-${className}`, form, className, teachers, room, periods, grid, electivesRaw };
+      }
+
+      const cnt = Object.keys(parsed).length;
+      if (!cnt) throw new Error('找不到 S1-1A 至 S6-6D 格式工作表');
+      state.classesRaw = parsed;
+      compileAll();
+      populateClassDropdowns();
+      document.getElementById('ttStatusText').textContent = `已更新：${file.name} (共 ${cnt} 班)`;
+      recalculate();
+    } catch (err) {
+      alert('時間表解析失敗：' + err.message);
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+window.addEventListener('DOMContentLoaded', initApp);
+</script>
+
+
+</body></html>
